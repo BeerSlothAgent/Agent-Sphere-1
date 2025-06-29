@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Cuboid as Cube, Circle, Triangle, Check, AlertCircle, Loader2, Database, Crosshair, Wallet } from 'lucide-react';
+import { MapPin, Cuboid as Cube, Circle, Triangle, Check, AlertCircle, Loader2, Database, Crosshair, Wallet, ChevronDown, Bot, GraduationCap, BookOpen, MapPinIcon, Building } from 'lucide-react';
 import { useAddress, ConnectWallet } from '@thirdweb-dev/react';
 
 interface DeployObjectProps {
@@ -12,6 +12,13 @@ interface ObjectType {
   name: string;
   icon: React.ReactNode;
   description: string;
+}
+
+interface AgentType {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
 }
 
 interface Location {
@@ -30,6 +37,10 @@ interface PreciseLocation {
 
 const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [selectedObject, setSelectedObject] = useState<string | null>(null);
+  const [selectedAgentType, setSelectedAgentType] = useState<string>('ai-agent');
+  const [agentName, setAgentName] = useState<string>('');
+  const [agentDescription, setAgentDescription] = useState<string>('');
+  const [showAgentDropdown, setShowAgentDropdown] = useState<boolean>(false);
   const [location, setLocation] = useState<Location | null>(null);
   const [preciseLocation, setPreciseLocation] = useState<PreciseLocation | null>(null);
   const [locationError, setLocationError] = useState<string>('');
@@ -62,9 +73,53 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     }
   ];
 
+  const agentTypes: AgentType[] = [
+    {
+      id: 'ai-agent',
+      name: 'AI Agent - Intelligent assistant agent',
+      description: 'General purpose AI assistant for various tasks',
+      icon: <Bot className="w-5 h-5" />
+    },
+    {
+      id: 'study-buddy',
+      name: 'Study Buddy - Educational support agent',
+      description: 'Helps with studying and educational content',
+      icon: <GraduationCap className="w-5 h-5" />
+    },
+    {
+      id: 'tutor-agent',
+      name: 'Tutor Agent - Subject-specific tutor',
+      description: 'Specialized tutoring for specific subjects',
+      icon: <BookOpen className="w-5 h-5" />
+    },
+    {
+      id: 'landmark',
+      name: 'Landmark - Location marker',
+      description: 'Marks important locations and provides information',
+      icon: <MapPinIcon className="w-5 h-5" />
+    },
+    {
+      id: 'building',
+      name: 'Building - Structure or building',
+      description: 'Represents buildings and architectural structures',
+      icon: <Building className="w-5 h-5" />
+    }
+  ];
+
   useEffect(() => {
     getCurrentLocation();
   }, []);
+
+  // Set default agent name when agent type changes
+  useEffect(() => {
+    if (selectedAgentType && !agentName) {
+      const agentType = agentTypes.find(type => type.id === selectedAgentType);
+      if (agentType) {
+        const baseName = agentType.name.split(' - ')[0];
+        setAgentName(`${baseName} Alpha`);
+      }
+    }
+  }, [selectedAgentType, agentName]);
 
   const getCurrentLocation = () => {
     setIsLoadingLocation(true);
@@ -174,34 +229,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     }
   };
 
-  // Generate object name based on type and existing count
-  const generateObjectName = async (objectType: string): Promise<string> => {
-    if (!supabase) {
-      // For demo mode, just use simple numbering
-      return `${objectType.charAt(0).toUpperCase() + objectType.slice(1)} 1`;
-    }
-
-    try {
-      // Get count of existing objects of this type
-      const { data, error } = await supabase
-        .from('deployed_objects')
-        .select('id')
-        .eq('object_type', objectType);
-
-      if (error) throw error;
-
-      const count = (data?.length || 0) + 1;
-      return `${objectType.charAt(0).toUpperCase() + objectType.slice(1)} ${count}`;
-    } catch (error) {
-      console.error('Error generating object name:', error);
-      // Fallback to simple naming
-      return `${objectType.charAt(0).toUpperCase() + objectType.slice(1)} 1`;
-    }
-  };
-
   const handleDeployObject = async () => {
-    if (!selectedObject || !location) {
-      setStatusMessage('Please select an object and ensure location is available');
+    if (!selectedObject || !location || !agentName.trim()) {
+      setStatusMessage('Please select an object, enter an agent name, and ensure location is available');
       setDeploymentStatus('error');
       return;
     }
@@ -232,16 +262,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     setDeploymentStatus('idle');
 
     try {
-      // Generate object name
-      const objectName = await generateObjectName(selectedObject);
-      const objectDescription = `A 3D ${selectedObject} object deployed in AR space`;
+      // Use the user-provided agent name and description
+      const finalDescription = agentDescription.trim() || `A ${selectedAgentType.replace('-', ' ')} deployed in AR space`;
 
       // Prepare the data to insert with precise coordinates
       const insertData = {
         user_id: address,
         object_type: selectedObject,
-        name: objectName,
-        description: objectDescription,
+        name: agentName.trim(),
+        description: finalDescription,
         // Standard coordinates (for backward compatibility)
         latitude: location.latitude,
         longitude: location.longitude,
@@ -270,7 +299,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       console.log('✅ Successfully deployed GeoAgent to database:', data);
       console.log('🎯 AR Viewer can now access this GeoAgent with precise coordinates:', {
         id: data[0]?.id,
-        name: objectName,
+        name: agentName,
         preciseCoords: {
           lat: preciseLocation.preciseLatitude,
           lon: preciseLocation.preciseLongitude,
@@ -285,11 +314,13 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         ? `with RTK precision (±${preciseLocation.accuracy}m)`
         : `with GPS accuracy (±${preciseLocation.accuracy}m)`;
       
-      setStatusMessage(`${objectName} deployed successfully ${accuracyText}! AR Viewer can now locate this GeoAgent with precise coordinates.`);
+      setStatusMessage(`${agentName} deployed successfully ${accuracyText}! AR Viewer can now locate this GeoAgent with precise coordinates.`);
       
-      // Reset selection after successful deployment
+      // Reset form after successful deployment
       setTimeout(() => {
         setSelectedObject(null);
+        setAgentName('');
+        setAgentDescription('');
         setDeploymentStatus('idle');
         setStatusMessage('');
         setPreciseLocation(null);
@@ -304,12 +335,13 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     }
   };
 
-  const canDeploy = selectedObject && location && !isDeploying && supabase && address;
+  const canDeploy = selectedObject && location && agentName.trim() && !isDeploying && supabase && address;
   const displayLocation = preciseLocation || location;
+  const selectedAgent = agentTypes.find(type => type.id === selectedAgentType);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-purple-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -320,7 +352,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             Deploy a GeoAgent
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Select a 3D object and deploy it at your precise location using RTK-corrected GPS. Other users will be able to see and interact with it through AR.
+            Configure your AI agent and deploy it at your precise location using RTK-corrected GPS. Other users will be able to see and interact with it through AR.
           </p>
         </motion.div>
 
@@ -390,61 +422,170 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Object Selection */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Agent Configuration */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-xl p-6"
+            className="lg:col-span-2 bg-white rounded-2xl shadow-xl p-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Choose Your GeoAgent</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">GeoAgent Configuration</h2>
             
-            <fieldset className="grid grid-cols-1 gap-4">
-              <legend className="sr-only">Select a GeoAgent type to deploy</legend>
-              {objectTypes.map((objectType) => (
-                <motion.button
-                  key={objectType.id}
-                  onClick={() => setSelectedObject(objectType.id)}
+            <div className="space-y-6">
+              {/* Agent Type Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Agent Type
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowAgentDropdown(!showAgentDropdown)}
+                    disabled={!supabase || !address}
+                    className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left flex items-center justify-between ${
+                      !supabase || !address
+                        ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                        : 'border-indigo-200 bg-indigo-50 hover:border-indigo-300'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-lg ${
+                        !supabase || !address
+                          ? 'bg-gray-100 text-gray-400'
+                          : 'bg-indigo-100 text-indigo-600'
+                      }`}>
+                        {selectedAgent?.icon}
+                      </div>
+                      <div>
+                        <div className={`font-medium ${!supabase || !address ? 'text-gray-400' : 'text-gray-900'}`}>
+                          {selectedAgent?.name}
+                        </div>
+                        <div className={`text-sm ${!supabase || !address ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {selectedAgent?.description}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronDown className={`h-5 w-5 transition-transform ${showAgentDropdown ? 'rotate-180' : ''} ${
+                      !supabase || !address ? 'text-gray-400' : 'text-gray-600'
+                    }`} />
+                  </button>
+                  
+                  {showAgentDropdown && supabase && address && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                      {agentTypes.map((agentType) => (
+                        <button
+                          key={agentType.id}
+                          onClick={() => {
+                            setSelectedAgentType(agentType.id);
+                            setShowAgentDropdown(false);
+                          }}
+                          className={`w-full p-3 text-left hover:bg-indigo-50 transition-colors flex items-center space-x-3 ${
+                            selectedAgentType === agentType.id ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            selectedAgentType === agentType.id ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'
+                          }`}>
+                            {agentType.icon}
+                          </div>
+                          <div>
+                            <div className="font-medium">{agentType.name}</div>
+                            <div className="text-sm text-gray-600">{agentType.description}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Agent Name */}
+              <div>
+                <label htmlFor="agent-name" className="block text-sm font-medium text-gray-700 mb-2">
+                  Agent Name
+                </label>
+                <input
+                  type="text"
+                  id="agent-name"
+                  value={agentName}
+                  onChange={(e) => setAgentName(e.target.value)}
+                  placeholder="e.g., Study Helper Alpha"
                   disabled={!supabase || !address}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                  className={`w-full p-4 rounded-xl border-2 transition-all duration-200 ${
                     !supabase || !address
                       ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                      : selectedObject === objectType.id
-                      ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                      : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                      : 'border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
                   }`}
-                  whileHover={supabase && address ? { scale: 1.02 } : {}}
-                  whileTap={supabase && address ? { scale: 0.98 } : {}}
-                  role="radio"
-                  aria-checked={selectedObject === objectType.id}
-                  aria-describedby={`${objectType.id}-description`}
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-lg ${
-                      !supabase || !address
-                        ? 'bg-gray-100 text-gray-400'
-                        : selectedObject === objectType.id
-                        ? 'bg-indigo-100 text-indigo-600'
-                        : 'bg-gray-100 text-gray-600'
-                    }`} aria-hidden="true">
-                      {objectType.icon}
-                    </div>
-                    <div className="text-left">
+                />
+              </div>
+
+              {/* Agent Description */}
+              <div>
+                <label htmlFor="agent-description" className="block text-sm font-medium text-gray-700 mb-2">
+                  Description (Optional)
+                </label>
+                <textarea
+                  id="agent-description"
+                  value={agentDescription}
+                  onChange={(e) => setAgentDescription(e.target.value)}
+                  placeholder="Describe your agent's purpose and capabilities..."
+                  rows={4}
+                  disabled={!supabase || !address}
+                  className={`w-full p-4 rounded-xl border-2 transition-all duration-200 resize-none ${
+                    !supabase || !address
+                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                      : 'border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
+                  }`}
+                />
+              </div>
+
+              {/* Object Type Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  3D Object Type
+                </label>
+                <fieldset className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <legend className="sr-only">Select a 3D object type for your agent</legend>
+                  {objectTypes.map((objectType) => (
+                    <motion.button
+                      key={objectType.id}
+                      onClick={() => setSelectedObject(objectType.id)}
+                      disabled={!supabase || !address}
+                      className={`p-4 rounded-xl border-2 transition-all duration-200 text-center ${
+                        !supabase || !address
+                          ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
+                          : selectedObject === objectType.id
+                          ? 'border-indigo-500 bg-indigo-50 shadow-md'
+                          : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                      }`}
+                      whileHover={supabase && address ? { scale: 1.02 } : {}}
+                      whileTap={supabase && address ? { scale: 0.98 } : {}}
+                      role="radio"
+                      aria-checked={selectedObject === objectType.id}
+                    >
+                      <div className={`p-3 rounded-lg mx-auto mb-2 w-fit ${
+                        !supabase || !address
+                          ? 'bg-gray-100 text-gray-400'
+                          : selectedObject === objectType.id
+                          ? 'bg-indigo-100 text-indigo-600'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {objectType.icon}
+                      </div>
                       <h3 className={`font-semibold ${!supabase || !address ? 'text-gray-400' : 'text-gray-900'}`}>
                         {objectType.name}
                       </h3>
-                      <p id={`${objectType.id}-description`} className={`text-sm ${!supabase || !address ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <p className={`text-sm ${!supabase || !address ? 'text-gray-400' : 'text-gray-600'}`}>
                         {objectType.description}
                       </p>
-                    </div>
-                    {selectedObject === objectType.id && supabase && address && (
-                      <Check className="h-5 w-5 text-indigo-600 ml-auto" aria-hidden="true" />
-                    )}
-                  </div>
-                </motion.button>
-              ))}
-            </fieldset>
+                      {selectedObject === objectType.id && supabase && address && (
+                        <Check className="h-5 w-5 text-indigo-600 mx-auto mt-2" />
+                      )}
+                    </motion.button>
+                  ))}
+                </fieldset>
+              </div>
+            </div>
           </motion.div>
 
           {/* Location & Deployment */}
@@ -454,22 +595,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-white rounded-2xl shadow-xl p-6"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Deployment Location</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Location Data</h2>
             
             {/* Location Display */}
             <div className="bg-gray-50 rounded-xl p-4 mb-6">
               <div className="flex items-center mb-3">
-                <MapPin className="h-5 w-5 text-indigo-600 mr-2" aria-hidden="true" />
-                <span className="font-medium text-gray-900">
-                  {preciseLocation?.correctionApplied ? 'RTK-Corrected Location' : 'GPS Location'}
-                </span>
+                <MapPin className="h-5 w-5 text-indigo-600 mr-2" />
+                <span className="font-medium text-gray-900">GPS Coordinates</span>
                 {isLoadingLocation && (
-                  <Loader2 className="h-4 w-4 text-indigo-600 ml-2 animate-spin" aria-hidden="true" />
-                )}
-                {preciseLocation?.correctionApplied && (
-                  <div className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                    RTK Enhanced
-                  </div>
+                  <Loader2 className="h-4 w-4 text-indigo-600 ml-2 animate-spin" />
                 )}
               </div>
               
@@ -493,14 +627,12 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                       ±{displayLocation.accuracy?.toFixed(2) || '10.00'}m
                     </span>
                   </div>
-                  {preciseLocation?.preciseAltitude && (
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Altitude:</span>
-                      <span className="text-sm text-gray-900">
-                        {preciseLocation.preciseAltitude.toFixed(2)}m
-                      </span>
-                    </div>
-                  )}
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Timestamp:</span>
+                    <span className="text-sm text-gray-900">
+                      {new Date().toLocaleTimeString()}
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <div className="text-sm text-gray-600">
@@ -510,10 +642,39 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               
               {locationError && (
                 <div className="mt-2 text-sm text-red-600 flex items-center" role="alert">
-                  <AlertCircle className="h-4 w-4 mr-1" aria-hidden="true" />
+                  <AlertCircle className="h-4 w-4 mr-1" />
                   {locationError}
                 </div>
               )}
+            </div>
+
+            {/* RTK Enhancement */}
+            {preciseLocation && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <div className="flex items-center mb-3">
+                  <Crosshair className="h-5 w-5 text-green-600 mr-2" />
+                  <span className="font-medium text-green-800">RTK Enhanced (For AR Viewer)</span>
+                </div>
+                <div className="text-sm text-green-700">
+                  RTK enhancement will be applied during deployment
+                </div>
+              </div>
+            )}
+
+            {/* Status */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+              <div className="flex items-center mb-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                <span className="font-medium text-blue-800">Status</span>
+              </div>
+              <div className="text-sm text-blue-700">
+                {!address ? 'Please connect your wallet to deploy GeoAgents' :
+                 !supabase ? 'Database connection required' :
+                 !location ? 'Getting location...' :
+                 !agentName.trim() ? 'Enter agent name to continue' :
+                 !selectedObject ? 'Select 3D object type' :
+                 'Location acquired. Ready to deploy with RTK enhancement.'}
+              </div>
             </div>
 
             {/* Get Precise Location Button */}
@@ -522,67 +683,70 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 onClick={getPreciseLocation}
                 disabled={isGettingPreciseLocation}
                 className="w-full mb-4 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-                aria-describedby="rtk-status"
               >
                 {isGettingPreciseLocation ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Getting RTK Precision...
                   </>
                 ) : (
                   <>
-                    <Crosshair className="h-4 w-4 mr-2" aria-hidden="true" />
+                    <Crosshair className="h-4 w-4 mr-2" />
                     Get RTK-Enhanced Location
                   </>
                 )}
               </button>
             )}
-            <span id="rtk-status" className="sr-only">
-              {isGettingPreciseLocation ? "Getting precise location data" : "RTK enhancement available"}
-            </span>
 
             {/* Refresh Location Button */}
             <button
               onClick={getCurrentLocation}
               disabled={isLoadingLocation}
-              className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              aria-describedby="location-status"
+              className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
             >
-              {isLoadingLocation ? 'Getting Location...' : 'Refresh Location'}
+              <MapPin className="h-4 w-4 mr-2" />
+              {isLoadingLocation ? 'Getting Location...' : 'Refresh'}
             </button>
-            <span id="location-status" className="sr-only">
-              {isLoadingLocation ? "Getting current location" : "Location ready"}
-            </span>
 
             {/* Deploy Button */}
             <motion.button
               onClick={handleDeployObject}
               disabled={!canDeploy}
-              className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-200 ${
+              className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-200 flex items-center justify-center ${
                 canDeploy
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
                   : 'bg-gray-300 cursor-not-allowed'
               }`}
               whileHover={canDeploy ? { scale: 1.02 } : {}}
               whileTap={canDeploy ? { scale: 0.98 } : {}}
-              aria-describedby="deploy-status"
             >
               {isDeploying ? (
-                <span className="flex items-center justify-center">
-                  <Loader2 className="h-5 w-5 mr-2 animate-spin" aria-hidden="true" />
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                   Deploying GeoAgent...
-                </span>
+                </>
               ) : !address ? (
                 'Connect Wallet to Deploy'
               ) : !supabase ? (
                 'Connect Database to Deploy'
               ) : (
-                'Deploy GeoAgent Here'
+                <>
+                  <MapPin className="h-5 w-5 mr-2" />
+                  Deploy GeoAgent Here
+                </>
               )}
             </motion.button>
-            <span id="deploy-status" className="sr-only">
-              {isDeploying ? "Deploying GeoAgent" : canDeploy ? "Ready to deploy" : "Cannot deploy - missing requirements"}
-            </span>
+
+            {/* Geodnet RTK Precision Info */}
+            <div className="mt-6 bg-indigo-50 border border-indigo-200 rounded-xl p-4">
+              <div className="flex items-center mb-2">
+                <Crosshair className="h-4 w-4 text-indigo-600 mr-2" />
+                <span className="font-medium text-indigo-800">Geodnet RTK Precision</span>
+              </div>
+              <p className="text-sm text-indigo-700">
+                Your GeoAgent will be deployed with centimeter-level accuracy using Geodnet's RTK network. Precise coordinates will be stored in dedicated database columns for accurate AR placement.
+              </p>
+            </div>
 
             {/* Status Message */}
             {statusMessage && (
@@ -597,9 +761,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 role="alert"
               >
                 {deploymentStatus === 'success' ? (
-                  <Check className="h-5 w-5 mr-2" aria-hidden="true" />
+                  <Check className="h-5 w-5 mr-2" />
                 ) : (
-                  <AlertCircle className="h-5 w-5 mr-2" aria-hidden="true" />
+                  <AlertCircle className="h-5 w-5 mr-2" />
                 )}
                 {statusMessage}
               </motion.div>
@@ -618,31 +782,31 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-indigo-600 font-bold" aria-hidden="true">1</span>
+                <span className="text-indigo-600 font-bold">1</span>
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Connect Wallet</h4>
-              <p className="text-sm text-gray-600">Connect your wallet to prove ownership and prevent spam deployments</p>
+              <h4 className="font-semibold text-gray-900 mb-2">Configure Agent</h4>
+              <p className="text-sm text-gray-600">Choose agent type, name, and description for your AI assistant</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-green-600 font-bold" aria-hidden="true">2</span>
+                <span className="text-green-600 font-bold">2</span>
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">Get GPS Location</h4>
               <p className="text-sm text-gray-600">Your device provides approximate GPS coordinates (±10m accuracy)</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-purple-600 font-bold" aria-hidden="true">3</span>
+                <span className="text-purple-600 font-bold">3</span>
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">RTK Enhancement</h4>
               <p className="text-sm text-gray-600">GEODNET RTK corrects your location to centimeter precision (±1cm)</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-pink-600 font-bold" aria-hidden="true">4</span>
+                <span className="text-pink-600 font-bold">4</span>
               </div>
               <h4 className="font-semibold text-gray-900 mb-2">Deploy & Store</h4>
-              <p className="text-sm text-gray-600">GeoAgent gets auto-named and stored with precise coordinates for AR viewing</p>
+              <p className="text-sm text-gray-600">GeoAgent gets stored with precise coordinates for AR viewing</p>
             </div>
           </div>
         </motion.div>
