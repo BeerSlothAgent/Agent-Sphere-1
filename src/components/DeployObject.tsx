@@ -37,7 +37,7 @@ interface PreciseLocation {
 
 const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [selectedObject, setSelectedObject] = useState<string | null>(null);
-  const [selectedAgentType, setSelectedAgentType] = useState<string>('ai-agent');
+  const [selectedAgentType, setSelectedAgentType] = useState<string>('Video Assistant');
   const [agentName, setAgentName] = useState<string>('');
   const [agentDescription, setAgentDescription] = useState<string>('');
   const [showAgentDropdown, setShowAgentDropdown] = useState<boolean>(false);
@@ -54,52 +54,52 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
   const objectTypes: ObjectType[] = [
     {
-      id: 'cube',
-      name: 'Cube',
+      id: 'Video Assistant',
+      name: 'Video Assistant',
       icon: <Cube className="w-8 h-8" />,
-      description: 'A simple 3D cube object'
+      description: 'An AI video assistant agent'
     },
     {
-      id: 'sphere',
-      name: 'Sphere',
+      id: 'Video Tutor',
+      name: 'Video Tutor',
       icon: <Circle className="w-8 h-8" />,
-      description: 'A smooth spherical object'
+      description: 'An educational video tutor agent'
     },
     {
-      id: 'pyramid',
-      name: 'Pyramid',
+      id: 'Video Guide',
+      name: 'Video Guide',
       icon: <Triangle className="w-8 h-8" />,
-      description: 'A triangular pyramid shape'
+      description: 'A location guide video agent'
     }
   ];
 
   const agentTypes: AgentType[] = [
     {
-      id: 'ai-agent',
-      name: 'AI Agent - Intelligent assistant agent',
+      id: 'Video Assistant',
+      name: 'Video Assistant - Intelligent assistant agent',
       description: 'General purpose AI assistant for various tasks',
       icon: <Bot className="w-5 h-5" />
     },
     {
-      id: 'study-buddy',
-      name: 'Study Buddy - Educational support agent',
+      id: 'Video Tutor',
+      name: 'Video Tutor - Educational support agent',
       description: 'Helps with studying and educational content',
       icon: <GraduationCap className="w-5 h-5" />
     },
     {
-      id: 'tutor-agent',
-      name: 'Tutor Agent - Subject-specific tutor',
-      description: 'Specialized tutoring for specific subjects',
+      id: 'Video Guide',
+      name: 'Video Guide - Location guide agent',
+      description: 'Provides location-based guidance and information',
       icon: <BookOpen className="w-5 h-5" />
     },
     {
-      id: 'landmark',
+      id: 'Landmark',
       name: 'Landmark - Location marker',
       description: 'Marks important locations and provides information',
       icon: <MapPinIcon className="w-5 h-5" />
     },
     {
-      id: 'building',
+      id: 'Building',
       name: 'Building - Structure or building',
       description: 'Represents buildings and architectural structures',
       icon: <Building className="w-5 h-5" />

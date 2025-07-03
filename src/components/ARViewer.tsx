@@ -105,18 +105,18 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
 
   const getObjectColor = (objectType: string) => {
     switch (objectType) {
-      case 'cube': return '#4f46e5'; // Indigo
-      case 'sphere': return '#7c3aed'; // Purple  
-      case 'pyramid': return '#ec4899'; // Pink
+      case 'Video Assistant': return '#4f46e5'; // Indigo
+      case 'Video Tutor': return '#7c3aed'; // Purple  
+      case 'Video Guide': return '#ec4899'; // Pink
       default: return '#6b7280'; // Gray
     }
   };
 
   const getObjectEmoji = (objectType: string) => {
     switch (objectType) {
-      case 'cube': return '🟦';
-      case 'sphere': return '🔵';
-      case 'pyramid': return '🔺';
+      case 'Video Assistant': return '🟦';
+      case 'Video Tutor': return '🔵';
+      case 'Video Guide': return '🔺';
       default: return '📦';
     }
   };
@@ -248,7 +248,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
               <a-entity key={obj.id} position={`${position.x} ${position.y} ${position.z}`}>
                 {/* 3D Object */}
                 <a-entity
-                  mixin={`${obj.object_type}-mixin`}
+                  mixin={`${obj.object_type === 'Video Assistant' ? 'cube' : obj.object_type === 'Video Tutor' ? 'sphere' : 'pyramid'}-mixin`}
                   material={`color: ${color}; metalness: 0.2; roughness: 0.8`}
                   class="clickable-object"
                   data-object-id={obj.id}
@@ -262,7 +262,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                   color="#ffffff"
                   font="kelsonsans"
                   width="8"
-                  geometry="primitive: plane; width: auto; height: auto"
                   material="color: rgba(0,0,0,0.7); transparent: true"
                 />
                 
