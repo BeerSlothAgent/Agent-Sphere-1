@@ -11,6 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThirdwebProvider 
       clientId={import.meta.env.VITE_THIRDWEB_CLIENT_ID}
       activeChain={Sepolia}
+      autoConnect={false}
     >
       <BrowserRouter>
         <App />
