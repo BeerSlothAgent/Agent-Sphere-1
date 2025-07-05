@@ -9,6 +9,15 @@ interface DeployedObject {
   description: string;
   object_type: string;
   user_id: string;
+  location_type: string;
+  range_meters: number;
+  chat_enabled: boolean;
+  voice_enabled: boolean;
+  mcp_integrations: any;
+  crypto_wallet_config: any;
+  deployment_cost: number;
+  interaction_fee: number;
+  owner_wallet: string;
   latitude: number;
   longitude: number;
   altitude?: number;
@@ -32,6 +41,9 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [selectedObject, setSelectedObject] = useState<DeployedObject | null>(null);
   const [arMode, setArMode] = useState<'demo' | 'camera'>('demo');
+  const [showInteractionPanel, setShowInteractionPanel] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'agent', message: string}>>([]);
+  const [currentMessage, setCurrentMessage] = useState<string>('');
   const sceneRef = useRef<any>(null);
 
   useEffect(() => {
@@ -132,6 +144,74 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
               Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c * 1000; // Distance in meters
+  };
+
+  const handleAgentInteraction = (agent: DeployedObject) => {
+    setSelectedObject(agent);
+    setShowInteractionPanel(true);
+    // Initialize with a greeting based on agent type
+    const greeting = getAgentGreeting(agent.object_type);
+    setChatMessages([{ role: 'agent', message: greeting }]);
+  };
+
+  const getAgentGreeting = (agentType: string) => {
+    switch (agentType) {
+      case 'ai_agent':
+        return "Hello! I'm your AI assistant. How can I help you today?";
+      case 'tutor':
+        return "Welcome! I'm here to help you learn. What subject would you like to explore?";
+      case 'landmark':
+        return "Hi there! I can provide information about this location and nearby services.";
+      case 'building':
+        return "Greetings! I specialize in spatial analysis and 3D modeling. What can I help you visualize?";
+      default:
+        return "Hello! I'm an AI agent ready to assist you.";
+    }
+  };
+
+  const sendChatMessage = () => {
+    if (!currentMessage.trim() || !selectedObject) return;
+
+    // Add user message
+    const userMessage = { role: 'user' as const, message: currentMessage };
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Generate mock agent response based on agent type and message
+    const agentResponse = generateAgentResponse(selectedObject.object_type, currentMessage);
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, { role: 'agent', message: agentResponse }]);
+    }, 1000);
+
+    setCurrentMessage('');
+  };
+
+  const generateAgentResponse = (agentType: string, userMessage: string) => {
+    const message = userMessage.toLowerCase();
+    
+    if (message.includes('weather')) {
+      return "Based on current data, it's partly cloudy with a temperature of 72°F. Perfect weather for outdoor activities!";
+    }
+    
+    if (message.includes('location') || message.includes('where')) {
+      return "You're currently at the coordinates where I was deployed. This area is great for exploring!";
+    }
+    
+    switch (agentType) {
+      case 'tutor':
+        if (message.includes('math') || message.includes('calculate')) {
+          return "I'd be happy to help with math! What specific problem are you working on?";
+        }
+        return "I can help you with various subjects including math, science, and literature. What would you like to learn about?";
+      
+      case 'landmark':
+        return "This location has interesting features nearby. I can provide directions, local business information, or historical facts about the area.";
+      
+      case 'building':
+        return "I can help analyze spatial relationships and create 3D models. Are you working on any architectural or design projects?";
+      
+      default:
+        return "That's an interesting question! I'm here to help with various tasks. Could you tell me more about what you need?";
+    }
   };
 
   const getRelativePosition = (objLat: number, objLon: number, index: number) => {
@@ -254,6 +334,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                   material={`color: ${color}; metalness: 0.2; roughness: 0.8`}
                   class="clickable-object"
                   data-object-id={obj.id}
+                  onClick={() => handleAgentInteraction(obj)}
                 />
                 
                 {/* Object Name Label */}
@@ -276,6 +357,24 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                   font="kelsonsans"
                   width="6"
                 />
+                
+                {/* Interaction Indicators */}
+                {obj.chat_enabled && (
+                  <a-text
+                    value="💬"
+                    position="-0.5 0.5 0"
+                    align="center"
+                    width="4"
+                  />
+                )}
+                {obj.voice_enabled && (
+                  <a-text
+                    value="🎤"
+                    position="0.5 0.5 0"
+                    align="center"
+                    width="4"
+                  />
+                )}
               </a-entity>
             );
           })}
@@ -313,6 +412,20 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
               </span>
             </div>
           )}
+          
+          <div className="flex items-center justify-between">
+            <span className="text-gray-300">Range:</span>
+            <span className="font-bold text-purple-400">{objects[0]?.range_meters?.toFixed(1) || '25.0'}m</span>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <span className="text-gray-300">Capabilities:</span>
+            <div className="flex space-x-1">
+              {objects.some(obj => obj.chat_enabled) && <span className="text-blue-400">💬</span>}
+              {objects.some(obj => obj.voice_enabled) && <span className="text-green-400">🎤</span>}
+              {objects.some(obj => obj.mcp_integrations) && <span className="text-purple-400">🔗</span>}
+            </div>
+          </div>
           
           <div className="pt-2 border-t border-gray-600">
             <p className="text-xs text-gray-400">
@@ -370,6 +483,12 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                       <div>Distance: {distance < 1000 ? `${distance.toFixed(0)}m` : `${(distance/1000).toFixed(1)}km`}</div>
                     )}
                     <div>Accuracy: ±{obj.accuracy?.toFixed(obj.correctionapplied ? 2 : 0) || '10'}m</div>
+                    <div className="flex items-center space-x-2">
+                      <span>Capabilities:</span>
+                      {obj.chat_enabled && <span className="text-blue-400">💬</span>}
+                      {obj.voice_enabled && <span className="text-green-400">🎤</span>}
+                      {obj.mcp_integrations && <span className="text-purple-400">🔗</span>}
+                    </div>
                   </div>
                 </div>
               );
@@ -398,7 +517,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       </div>
 
       {/* Object Details Modal */}
-      {selectedObject && (
+      {selectedObject && !showInteractionPanel && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -430,6 +549,16 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
               </div>
               
               <div>
+                <span className="font-medium text-gray-700">Location Type:</span>
+                <span className="ml-2 text-gray-600">{selectedObject.location_type}</span>
+              </div>
+              
+              <div>
+                <span className="font-medium text-gray-700">Range:</span>
+                <span className="ml-2 text-gray-600">{selectedObject.range_meters?.toFixed(1)}m</span>
+              </div>
+              
+              <div>
                 <span className="font-medium text-gray-700">Coordinates:</span>
                 <div className="mt-1 font-mono text-xs text-gray-600">
                   <div>Lat: {(selectedObject.preciselatitude || selectedObject.latitude).toFixed(8)}</div>
@@ -458,14 +587,145 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                   {new Date(selectedObject.created_at).toLocaleDateString()}
                 </span>
               </div>
+              
+              <div>
+                <span className="font-medium text-gray-700">Owner:</span>
+                <span className="ml-2 text-gray-600 font-mono text-xs">
+                  {selectedObject.owner_wallet ? 
+                    `${selectedObject.owner_wallet.slice(0, 6)}...${selectedObject.owner_wallet.slice(-4)}` : 
+                    'Unknown'}
+                </span>
+              </div>
+              
+              <div>
+                <span className="font-medium text-gray-700">Capabilities:</span>
+                <div className="mt-1 flex flex-wrap gap-2">
+                  {selectedObject.chat_enabled && (
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                      💬 Chat
+                    </span>
+                  )}
+                  {selectedObject.voice_enabled && (
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                      🎤 Voice
+                    </span>
+                  )}
+                  {selectedObject.mcp_integrations && (
+                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+                      🔗 MCP
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
             
-            <button
-              onClick={() => setSelectedObject(null)}
-              className="w-full mt-6 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
-            >
-              Close
-            </button>
+            <div className="mt-6 space-y-2">
+              {selectedObject.chat_enabled && (
+                <button
+                  onClick={() => {
+                    setShowInteractionPanel(true);
+                    const greeting = getAgentGreeting(selectedObject.object_type);
+                    setChatMessages([{ role: 'agent', message: greeting }]);
+                  }}
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                >
+                  💬 Start Chat
+                </button>
+              )}
+              
+              {selectedObject.voice_enabled && (
+                <button
+                  onClick={() => alert('Voice interaction coming soon!')}
+                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                >
+                  🎤 Voice Chat
+                </button>
+              )}
+              
+              <button
+                onClick={() => setSelectedObject(null)}
+                className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Chat Interaction Panel */}
+      {showInteractionPanel && selectedObject && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[80vh] flex flex-col"
+          >
+            {/* Chat Header */}
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center">
+                <span className="text-2xl mr-3">{getObjectEmoji(selectedObject.object_type)}</span>
+                <div>
+                  <h3 className="font-bold text-gray-900">{selectedObject.name}</h3>
+                  <p className="text-sm text-gray-600">AI Agent Chat</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setShowInteractionPanel(false);
+                  setChatMessages([]);
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Chat Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-96">
+              {chatMessages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
+                      msg.role === 'user'
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-gray-100 text-gray-900'
+                    }`}
+                  >
+                    {msg.message}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                  placeholder="Type your message..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <button
+                  onClick={sendChatMessage}
+                  disabled={!currentMessage.trim()}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Send
+                </button>
+              </div>
+              
+              {/* Interaction Cost */}
+              <div className="mt-2 text-xs text-gray-500 text-center">
+                Interaction fee: {selectedObject.interaction_fee || 1} Aura per message
+              </div>
+            </div>
           </motion.div>
         </div>
       )}
