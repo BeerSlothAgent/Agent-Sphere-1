@@ -417,15 +417,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         user_id: address,
         name: agentName.trim(),
         description: agentDescription.trim() || `A ${selectedAgentType.replace('_', ' ')} deployed in AR space`,
-        object_type: selectedAgentType,
+        object_type: selectedObject,
         
-        location_type: locationTypeSelection,
-        range_meters: rangeMeters,
-        chat_enabled: selectedCapabilities.includes('chat'),
-        voice_enabled: selectedCapabilities.includes('voice'),
-        defi_enabled: selectedCapabilities.includes('defi'),
-        network: deploymentNetwork,
-        owner_wallet: address,
         // Location & Positioning (RTK Precision)
         latitude: location.latitude,
         longitude: location.longitude,
@@ -435,14 +428,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         precisealtitude: preciseLocation.preciseAltitude || null,
         accuracy: preciseLocation.accuracy,
         correctionapplied: preciseLocation.correctionApplied,
-        is_active: true, // Ensure GeoAgent is active for AR Viewer
-        // Advanced configurations
-        eliza_config: selectedAgent?.defaultConfig?.eliza_config || null,
-        mcp_integrations: selectedAgent?.defaultConfig?.mcp_integrations || null,
-        tokenization_config: selectedAgent?.defaultConfig?.tokenization_config || null,
-        // Economic settings
-        deployment_cost: 100, // Default 100 Auras
-        interaction_fee: 1 // Default 1 Aura per interaction
+        location_type: selectedLocationType,
         
         // Visibility & Range System
         range_meters: rangeMeters,
@@ -1191,6 +1177,26 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
               </div>
             )}
+            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-6">
+              <div className="flex items-center mb-3">
+                <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                <span className="font-medium text-purple-800">Economic Model</span>
+              </div>
+              <div className="space-y-2 text-sm text-purple-700">
+                <div className="flex justify-between">
+                  <span>Deployment Cost:</span>
+                  <span className="font-bold">100 Auras</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Interaction Fee:</span>
+                  <span className="font-bold">1 Aura per message</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Network:</span>
+                  <span className="font-bold">{deploymentNetwork}</span>
+                </div>
+              </div>
+            </div>
 
             {/* Status */}
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
