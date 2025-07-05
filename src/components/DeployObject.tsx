@@ -128,6 +128,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [activeTab, setActiveTab] = useState<'basic' | 'appearance' | 'capabilities' | 'economics'>('basic');
   
   const address = useAddress();
+  
+  // Define deployment network
+  const deploymentNetwork = 'Avalanche Fuji';
 
   const agentTypes: AgentType[] = [
     {
