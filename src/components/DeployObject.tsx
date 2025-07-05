@@ -37,7 +37,7 @@ interface PreciseLocation {
 
 const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [selectedObject, setSelectedObject] = useState<string | null>(null);
-  const [selectedAgentType, setSelectedAgentType] = useState<string>('Video Assistant');
+  const [selectedAgentType, setSelectedAgentType] = useState<string>('video-assistant');
   const [agentName, setAgentName] = useState<string>('');
   const [agentDescription, setAgentDescription] = useState<string>('');
   const [showAgentDropdown, setShowAgentDropdown] = useState<boolean>(false);
@@ -54,19 +54,19 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
   const objectTypes: ObjectType[] = [
     {
-      id: 'Video Assistant',
+      id: 'video-assistant',
       name: 'Video Assistant',
       icon: <Cube className="w-8 h-8" />,
       description: 'An AI video assistant agent'
     },
     {
-      id: 'Video Tutor',
+      id: 'video-tutor',
       name: 'Video Tutor',
       icon: <Circle className="w-8 h-8" />,
       description: 'An educational video tutor agent'
     },
     {
-      id: 'Video Guide',
+      id: 'video-guide',
       name: 'Video Guide',
       icon: <Triangle className="w-8 h-8" />,
       description: 'A location guide video agent'
@@ -75,31 +75,31 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
   const agentTypes: AgentType[] = [
     {
-      id: 'Video Assistant',
+      id: 'video-assistant',
       name: 'Video Assistant - Intelligent assistant agent',
       description: 'General purpose AI assistant for various tasks',
       icon: <Bot className="w-5 h-5" />
     },
     {
-      id: 'Video Tutor',
+      id: 'video-tutor',
       name: 'Video Tutor - Educational support agent',
       description: 'Helps with studying and educational content',
       icon: <GraduationCap className="w-5 h-5" />
     },
     {
-      id: 'Video Guide',
+      id: 'video-guide',
       name: 'Video Guide - Location guide agent',
       description: 'Provides location-based guidance and information',
       icon: <BookOpen className="w-5 h-5" />
     },
     {
-      id: 'Landmark',
+      id: 'landmark',
       name: 'Landmark - Location marker',
       description: 'Marks important locations and provides information',
       icon: <MapPinIcon className="w-5 h-5" />
     },
     {
-      id: 'Building',
+      id: 'building',
       name: 'Building - Structure or building',
       description: 'Represents buildings and architectural structures',
       icon: <Building className="w-5 h-5" />
@@ -401,7 +401,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   theme="light"
                   btnTitle="Connect Wallet"
                   modalTitle="Connect Wallet to AgentSphere"
-                  modalTitleIconUrl=""
                   modalSize="compact"
                   welcomeScreen={{
                     title: "Connect to AgentSphere",

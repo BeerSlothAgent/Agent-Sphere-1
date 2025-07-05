@@ -118,7 +118,6 @@ const Navbar = () => {
                     theme="light"
                     btnTitle="Connect Wallet"
                     modalTitle="Connect Wallet to AgentSphere"
-                    modalTitleIconUrl=""
                     modalSize="compact"
                     welcomeScreen={{
                       title: "Connect to AgentSphere",
@@ -251,7 +250,6 @@ const Navbar = () => {
                     theme="light"
                     btnTitle="Connect Wallet"
                     modalTitle="Connect Wallet to AgentSphere"
-                    modalTitleIconUrl=""
                     modalSize="compact"
                     welcomeScreen={{
                       title: "Connect to AgentSphere",
