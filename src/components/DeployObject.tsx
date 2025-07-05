@@ -563,7 +563,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 <div>
                   <span className="text-orange-800 font-medium">Wallet connection required</span>
                   <p className="text-orange-700 text-sm mt-1">
-                    Connect your wallet to deploy and own AI agents.
+                    <strong>RTK Enhancement:</strong> RTK positioning corrects your location to centimeter precision (±1cm)
                   </p>
                 </div>
               </div>
