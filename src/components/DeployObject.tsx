@@ -465,7 +465,10 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         rtk_enhanced: preciseLocation.correctionApplied,
         rtk_provider: 'GeoNet'
       };
-
+        gas_used: null,
+        algorand_address: null,
+        algorand_network: 'testnet',
+        algorand_app_id: null
       console.log('🚀 Deploying Complete Agent Specification:', agentData);
 
       const { data, error } = await supabase
