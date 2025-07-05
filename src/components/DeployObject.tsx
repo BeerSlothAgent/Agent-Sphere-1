@@ -123,9 +123,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   
   // UI State
-  const [showAgentDropdown, setShowAgentDropdown] = useState<boolean>(false);
-  const [showLocationDropdown, setShowLocationDropdown] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'appearance' | 'capabilities' | 'economics'>('basic');
   
   const address = useAddress();
   
@@ -463,16 +460,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         deployment_cost: deploymentCost,
         interaction_fee: 1.0,
         
-        // Network Configuration
-        network: 'avalanche-fuji',
-        rtk_enhanced: preciseLocation.correctionApplied,
-        rtk_provider: 'GeoNet',
-        
-        // Additional fields
-        gas_used: null,
-        algorand_address: null,
-        algorand_network: 'testnet',
-        algorand_app_id: null
+        is_active: true // Ensure GeoAgent is active for AR Viewer
       };
       console.log('🚀 Deploying Complete Agent Specification:', agentData);
 
