@@ -119,9 +119,17 @@ const Navbar = () => {
                     btnTitle="Connect Wallet"
                     modalTitle="Connect Wallet to AgentSphere"
                     modalTitleIconUrl=""
+                    modalSize="compact"
                     welcomeScreen={{
                       title: "Connect to AgentSphere",
                       subtitle: "Connect your wallet to deploy and manage virtual objects"
+                    }}
+                    detailsBtn={() => {
+                      return (
+                        <div style={{ display: 'none' }} aria-hidden="true">
+                          Details
+                        </div>
+                      );
                     }}
                     className="!bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200 !px-4 !py-2"
                     style={{
@@ -244,9 +252,17 @@ const Navbar = () => {
                     btnTitle="Connect Wallet"
                     modalTitle="Connect Wallet to AgentSphere"
                     modalTitleIconUrl=""
+                    modalSize="compact"
                     welcomeScreen={{
                       title: "Connect to AgentSphere",
                       subtitle: "Connect your wallet to deploy and manage virtual objects"
+                    }}
+                    detailsBtn={() => {
+                      return (
+                        <div style={{ display: 'none' }} aria-hidden="true">
+                          Details
+                        </div>
+                      );
                     }}
                     className="!w-full !bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200"
                     style={{

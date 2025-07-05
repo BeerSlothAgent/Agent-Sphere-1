@@ -402,9 +402,17 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   btnTitle="Connect Wallet"
                   modalTitle="Connect Wallet to AgentSphere"
                   modalTitleIconUrl=""
+                  modalSize="compact"
                   welcomeScreen={{
                     title: "Connect to AgentSphere",
                     subtitle: "Connect your wallet to deploy and manage GeoAgents"
+                  }}
+                  detailsBtn={() => {
+                    return (
+                      <div style={{ display: 'none' }} aria-hidden="true">
+                        Details
+                      </div>
+                    );
                   }}
                   className="!bg-orange-600 !text-white !rounded-lg !font-medium !px-4 !py-2 !text-sm"
                   style={{
