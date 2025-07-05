@@ -417,8 +417,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         user_id: address,
         name: agentName.trim(),
         description: agentDescription.trim() || `A ${selectedAgentType.replace('_', ' ')} deployed in AR space`,
-        object_type: selectedObject,
+        object_type: selectedAgentType,
         
+        location_type: locationTypeSelection,
+        range_meters: rangeMeters,
+        chat_enabled: selectedCapabilities.includes('chat'),
+        voice_enabled: selectedCapabilities.includes('voice'),
+        defi_enabled: selectedCapabilities.includes('defi'),
+        network: deploymentNetwork,
+        owner_wallet: address,
         // Location & Positioning (RTK Precision)
         latitude: location.latitude,
         longitude: location.longitude,
@@ -428,7 +435,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         precisealtitude: preciseLocation.preciseAltitude || null,
         accuracy: preciseLocation.accuracy,
         correctionapplied: preciseLocation.correctionApplied,
-        location_type: selectedLocationType,
+        is_active: true, // Ensure GeoAgent is active for AR Viewer
+        // Advanced configurations
+        eliza_config: selectedAgent?.defaultConfig?.eliza_config || null,
+        mcp_integrations: selectedAgent?.defaultConfig?.mcp_integrations || null,
+        tokenization_config: selectedAgent?.defaultConfig?.tokenization_config || null,
+        // Economic settings
+        deployment_cost: 100, // Default 100 Auras
+        interaction_fee: 1 // Default 1 Aura per interaction
         
         // Visibility & Range System
         range_meters: rangeMeters,
