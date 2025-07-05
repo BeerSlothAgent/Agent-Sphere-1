@@ -37,7 +37,7 @@ interface PreciseLocation {
 
 const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [selectedObject, setSelectedObject] = useState<string | null>(null);
-  const [selectedAgentType, setSelectedAgentType] = useState<string>('video-assistant');
+  const [selectedAgentType, setSelectedAgentType] = useState<string>('ai_agent');
   const [agentName, setAgentName] = useState<string>('');
   const [agentDescription, setAgentDescription] = useState<string>('');
   const [showAgentDropdown, setShowAgentDropdown] = useState<boolean>(false);
@@ -54,19 +54,19 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
   const objectTypes: ObjectType[] = [
     {
-      id: 'video-assistant',
+      id: 'ai_agent',
       name: 'Video Assistant',
       icon: <Cube className="w-8 h-8" />,
       description: 'An AI video assistant agent'
     },
     {
-      id: 'video-tutor',
+      id: 'tutor',
       name: 'Video Tutor',
       icon: <Circle className="w-8 h-8" />,
       description: 'An educational video tutor agent'
     },
     {
-      id: 'video-guide',
+      id: 'landmark',
       name: 'Video Guide',
       icon: <Triangle className="w-8 h-8" />,
       description: 'A location guide video agent'
@@ -75,19 +75,19 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
   const agentTypes: AgentType[] = [
     {
-      id: 'video-assistant',
+      id: 'ai_agent',
       name: 'Video Assistant - Intelligent assistant agent',
       description: 'General purpose AI assistant for various tasks',
       icon: <Bot className="w-5 h-5" />
     },
     {
-      id: 'video-tutor',
+      id: 'tutor',
       name: 'Video Tutor - Educational support agent',
       description: 'Helps with studying and educational content',
       icon: <GraduationCap className="w-5 h-5" />
     },
     {
-      id: 'video-guide',
+      id: 'landmark',
       name: 'Video Guide - Location guide agent',
       description: 'Provides location-based guidance and information',
       icon: <BookOpen className="w-5 h-5" />
