@@ -510,6 +510,18 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const displayLocation = preciseLocation || location;
   const selectedAgent = agentTypes.find(type => type.id === selectedAgentType);
   const selectedLocationTypeData = locationTypes.find(type => type.id === selectedLocationType);
+  // Debug information for deployment requirements
+  const deploymentRequirements = {
+    selectedObject: !!selectedObject,
+    location: !!location,
+    agentName: !!agentName.trim(),
+    notDeploying: !isDeploying,
+    supabaseConnected: !!supabase,
+    walletConnected: !!address
+  };
+
+  console.log('🔍 Deployment Requirements Check:', deploymentRequirements);
+  console.log('✅ Can Deploy:', canDeploy);
 
   const tabs = [
     { id: 'basic', name: 'Basic Info', icon: <Settings className="w-4 h-4" /> },
@@ -1211,6 +1223,31 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                  !selectedObject ? 'Select 3D object type' :
                  'Ready to deploy with RTK enhancement'}
               </div>
+              
+              {/* Debug Requirements Display */}
+              <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
+                <div className="font-medium mb-1">Requirements Check:</div>
+                <div className="grid grid-cols-2 gap-1">
+                  <div className={deploymentRequirements.walletConnected ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.walletConnected ? '✅' : '❌'} Wallet
+                  </div>
+                  <div className={deploymentRequirements.supabaseConnected ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.supabaseConnected ? '✅' : '❌'} Database
+                  </div>
+                  <div className={deploymentRequirements.location ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.location ? '✅' : '❌'} Location
+                  </div>
+                  <div className={deploymentRequirements.agentName ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.agentName ? '✅' : '❌'} Agent Name
+                  </div>
+                  <div className={deploymentRequirements.selectedObject ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.selectedObject ? '✅' : '❌'} Object Type
+                  </div>
+                  <div className={deploymentRequirements.notDeploying ? 'text-green-600' : 'text-red-600'}>
+                    {deploymentRequirements.notDeploying ? '✅' : '❌'} Ready
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Get Precise Location Button */}
@@ -1255,6 +1292,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               }`}
               whileHover={canDeploy ? { scale: 1.02 } : {}}
               whileTap={canDeploy ? { scale: 0.98 } : {}}
+              title={!canDeploy ? 'Complete all requirements above to deploy' : 'Deploy your GeoAgent'}
             >
               {isDeploying ? (
                 <>
@@ -1262,9 +1300,24 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   Deploying Agent...
                 </>
               ) : !address ? (
-                'Connect Wallet to Deploy'
+                <>
+                  <Wallet className="h-5 w-5 mr-2" />
+                  Connect Wallet to Deploy
+                </>
               ) : !supabase ? (
-                'Connect Database to Deploy'
+                <>
+                  <Database className="h-5 w-5 mr-2" />
+                  Connect Database to Deploy
+                </>
+              ) : !location ? (
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  Getting Location...
+                </>
+              ) : !agentName.trim() ? (
+                'Enter Agent Name'
+              ) : !selectedObject ? (
+                'Select Object Type'
               ) : (
                 <>
                   <Bot className="h-5 w-5 mr-2" />
@@ -1273,6 +1326,32 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               )}
             </motion.button>
 
+            {/* Cost Information */}
+            <div className="mt-4 bg-purple-50 border border-purple-200 rounded-xl p-4">
+              <div className="flex items-center mb-2">
+                <div className="w-4 h-4 bg-purple-500 rounded-full mr-2"></div>
+                <span className="font-medium text-purple-800">Deployment Cost</span>
+              </div>
+              <div className="text-sm text-purple-700">
+                <div className="flex justify-between items-center">
+                  <span>Base deployment:</span>
+                  <span className="font-bold">FREE</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>RTK enhancement:</span>
+                  <span className="font-bold">FREE</span>
+                </div>
+                <div className="mt-2 pt-2 border-t border-purple-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Total cost:</span>
+                    <span className="font-bold text-lg text-purple-600">FREE</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-purple-600 mt-2">
+                No Auras required! Deploy as many GeoAgents as you want during the beta period.
+              </p>
+            </div>
             {/* Cost Summary */}
             <div className="mt-4 text-center text-sm text-gray-600">
               <div>Deployment Cost: {deploymentCost} Auras</div>
