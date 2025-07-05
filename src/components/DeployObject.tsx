@@ -648,34 +648,36 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     <div className="relative">
                       <button
                         onClick={() => setShowAgentDropdown(!showAgentDropdown)}
-                        disabled={!supabase || !address}
+                        disabled={!supabase}
                         className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left flex items-center justify-between ${
-                          !supabase || !address
+                          !supabase
                             ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
                             : 'border-indigo-200 bg-indigo-50 hover:border-indigo-300'
                         }`}
                       >
                         <div className="flex items-center space-x-3">
                           <div className={`p-2 rounded-lg ${
-                            !supabase || !address
+                            !supabase
                               ? 'bg-gray-100 text-gray-400'
                               : 'bg-indigo-100 text-indigo-600'
                           }`}>
                             {selectedAgent?.icon}
                           </div>
                           <div>
-                            <div className={`font-medium ${!supabase || !address ? 'text-gray-400' : 'text-gray-900'}`}>
+                            <div className={`font-medium ${!supabase ? 'text-gray-400' : 'text-gray-900'}`}>
                               {selectedAgent?.name}
                             </div>
-                            <div className={`text-sm ${!supabase || !address ? 'text-gray-400' : 'text-gray-600'}`}>
+                            <div className={`text-sm ${!supabase ? 'text-gray-400' : 'text-gray-600'}`}>
                               {selectedAgent?.description}
                             </div>
                           </div>
                         </div>
-                        <ChevronDown className={`h-5 w-5 transition-transform ${showAgentDropdown ? 'rotate-180' : ''}`} />
+                        <ChevronDown className={`h-5 w-5 transition-transform ${showAgentDropdown ? 'rotate-180' : ''} ${
+                          !supabase ? 'text-gray-400' : 'text-gray-600'
+                        }`} />
                       </button>
                       
-                      {showAgentDropdown && supabase && address && (
+                      {showAgentDropdown && supabase && (
                         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
                           {agentTypes.map((agentType) => (
                             <button
@@ -715,9 +717,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                       value={agentName}
                       onChange={(e) => setAgentName(e.target.value)}
                       placeholder="e.g., Study Helper Alpha"
-                      disabled={!supabase || !address}
+                      disabled={!supabase}
                       className={`w-full p-4 rounded-xl border-2 transition-all duration-200 ${
-                        !supabase || !address
+                        !supabase
                           ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
                           : 'border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
                       }`}
@@ -735,9 +737,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                       onChange={(e) => setAgentDescription(e.target.value)}
                       placeholder="Describe your agent's purpose and capabilities..."
                       rows={4}
-                      disabled={!supabase || !address}
+                      disabled={!supabase}
                       className={`w-full p-4 rounded-xl border-2 transition-all duration-200 resize-none ${
-                        !supabase || !address
+                        !supabase
                           ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
                           : 'border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
                       }`}
@@ -847,19 +849,19 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                         <motion.button
                           key={objectType.id}
                           onClick={() => setSelectedObject(objectType.id)}
-                          disabled={!supabase || !address}
+                          disabled={!supabase}
                           className={`p-4 rounded-xl border-2 transition-all duration-200 text-center ${
-                            !supabase || !address
+                            !supabase
                               ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
                               : selectedObject === objectType.id
                               ? 'border-indigo-500 bg-indigo-50 shadow-md'
                               : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
                           }`}
-                          whileHover={supabase && address ? { scale: 1.02 } : {}}
-                          whileTap={supabase && address ? { scale: 0.98 } : {}}
+                          whileHover={supabase ? { scale: 1.02 } : {}}
+                          whileTap={supabase ? { scale: 0.98 } : {}}
                         >
                           <div className={`p-3 rounded-lg mx-auto mb-2 w-fit ${
-                            !supabase || !address
+                            !supabase
                               ? 'bg-gray-100 text-gray-400'
                               : selectedObject === objectType.id
                               ? 'bg-indigo-100 text-indigo-600'
@@ -867,13 +869,13 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                           }`}>
                             {objectType.icon}
                           </div>
-                          <h3 className={`font-semibold ${!supabase || !address ? 'text-gray-400' : 'text-gray-900'}`}>
+                          <h3 className={`font-semibold ${!supabase ? 'text-gray-400' : 'text-gray-900'}`}>
                             {objectType.name}
                           </h3>
-                          <p className={`text-sm ${!supabase || !address ? 'text-gray-400' : 'text-gray-600'}`}>
+                          <p className={`text-sm ${!supabase ? 'text-gray-400' : 'text-gray-600'}`}>
                             {objectType.description}
                           </p>
-                          {selectedObject === objectType.id && supabase && address && (
+                          {selectedObject === objectType.id && supabase && (
                             <Check className="h-5 w-5 text-indigo-600 mx-auto mt-2" />
                           )}
                         </motion.button>
@@ -1216,12 +1218,12 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 <span className="font-medium text-blue-800">Status</span>
               </div>
               <div className="text-sm text-blue-700">
-                {!address ? 'Connect wallet to deploy' :
+                {!address ? 'Please connect your wallet to deploy GeoAgents' :
                  !supabase ? 'Database connection required' :
                  !location ? 'Getting location...' :
-                 !agentName.trim() ? 'Enter agent name' :
+                 !agentName.trim() ? 'Enter agent name to continue' :
                  !selectedObject ? 'Select 3D object type' :
-                 'Ready to deploy with RTK enhancement'}
+                 'Location acquired. Ready to deploy with RTK enhancement.'}
               </div>
               
               {/* Debug Requirements Display */}
@@ -1251,7 +1253,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             </div>
 
             {/* Get Precise Location Button */}
-            {location && !preciseLocation && supabase && address && (
+            {location && !preciseLocation && supabase && (
               <button
                 onClick={getPreciseLocation}
                 disabled={isGettingPreciseLocation}
