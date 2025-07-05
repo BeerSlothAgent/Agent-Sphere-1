@@ -211,7 +211,7 @@ const Hero = () => {
               } rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-${index * 2000}`}></div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Process flow indicators */}
         <motion.div 
