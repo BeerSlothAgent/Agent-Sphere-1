@@ -463,12 +463,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         // Network Configuration
         network: 'avalanche-fuji',
         rtk_enhanced: preciseLocation.correctionApplied,
-        rtk_provider: 'GeoNet'
-      };
+        rtk_provider: 'GeoNet',
+        
+        // Additional fields
         gas_used: null,
         algorand_address: null,
         algorand_network: 'testnet',
         algorand_app_id: null
+      };
       console.log('🚀 Deploying Complete Agent Specification:', agentData);
 
       const { data, error } = await supabase
