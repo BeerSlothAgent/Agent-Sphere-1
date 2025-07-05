@@ -123,6 +123,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   
   // UI State
+  const [activeTab, setActiveTab] = useState<'basic' | 'appearance' | 'capabilities' | 'economics'>('basic');
+  const [showAgentDropdown, setShowAgentDropdown] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   
   const address = useAddress();
   
