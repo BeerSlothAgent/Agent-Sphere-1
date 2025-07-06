@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Crosshair, AlertCircle, Loader2, Eye, RotateCcw, Info } from 'lucide-react';
 import 'aframe';
+import AgentInteractionModal from './interaction/AgentInteractionModal';
 
 interface DeployedObject {
   id: string;
@@ -43,6 +44,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [showInteractionPanel, setShowInteractionPanel] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'agent', message: string}>>([]);
   const [currentMessage, setCurrentMessage] = useState<string>('');
+  const [showInteractionModal, setShowInteractionModal] = useState<boolean>(false);
   const sceneRef = useRef<any>(null);
 
   useEffect(() => {
@@ -146,11 +148,25 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   };
 
   const handleAgentInteraction = (agent: DeployedObject) => {
-    setSelectedObject(agent);
-    setShowInteractionPanel(true);
-    // Initialize with a greeting based on agent type
-    const greeting = getAgentGreeting(agent.object_type);
-    setChatMessages([{ role: 'agent', message: greeting }]);
+    // Convert DeployedObject to Agent format for the modal
+    const enhancedAgent = {
+      id: parseInt(agent.id) || Math.random(),
+      name: agent.name,
+      description: agent.description || `I'm a ${agent.object_type} agent ready to help!`,
+      object_type: agent.object_type,
+      latitude: agent.preciselatitude || agent.latitude,
+      longitude: agent.preciselongitude || agent.longitude,
+      range_meters: agent.range_meters || 25,
+      interaction_fee: agent.interaction_fee || 10,
+      interaction_types: agent.interaction_types || ["chat", "voice", "video"],
+      agent_wallet_type: agent.agent_wallet_type || "NEAR",
+      agent_wallet_address: agent.agent_wallet_address || `${agent.name.toLowerCase().replace(/\s+/g, '')}.near`,
+      mcp_integrations: agent.mcp_integrations || ["Chat", "Voice"],
+      is_active: agent.is_active
+    };
+
+    setSelectedObject(enhancedAgent);
+    setShowInteractionModal(true);
   };
 
   const getAgentGreeting = (agentType: string) => {
@@ -516,7 +532,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       </div>
 
       {/* Object Details Modal */}
-      {selectedObject && !showInteractionPanel && (
+      {selectedObject && !showInteractionModal && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -652,82 +668,16 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
         </div>
       )}
 
-      {/* Chat Interaction Panel */}
-      {showInteractionPanel && selectedObject && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[80vh] flex flex-col"
-          >
-            {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">{getObjectEmoji(selectedObject.object_type)}</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">{selectedObject.name}</h3>
-                  <p className="text-sm text-gray-600">AI Agent Chat</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setShowInteractionPanel(false);
-                  setChatMessages([]);
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
-            </div>
-            
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-96">
-              {chatMessages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
-                      msg.role === 'user'
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}
-                  >
-                    {msg.message}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                <button
-                  onClick={sendChatMessage}
-                  disabled={!currentMessage.trim()}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Send
-                </button>
-              </div>
-              
-              {/* Interaction Cost */}
-              <div className="mt-2 text-xs text-gray-500 text-center">
-                Interaction fee: {selectedObject.interaction_fee || 1} Aura per message
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
+      {/* Enhanced Interaction Modal */}
+      <AgentInteractionModal
+        agent={selectedObject}
+        visible={showInteractionModal}
+        onClose={() => {
+          setShowInteractionModal(false);
+          setSelectedObject(null);
+        }}
+        userLocation={userLocation}
+      />
 
       {/* Instructions */}
       <div className="absolute bottom-4 right-4 z-10 bg-black bg-opacity-70 backdrop-blur-sm rounded-xl p-4 text-white max-w-xs">

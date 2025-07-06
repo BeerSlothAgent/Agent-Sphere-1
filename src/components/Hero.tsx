@@ -1,8 +1,108 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Plus, Eye, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AgentInteractionModal from './interaction/AgentInteractionModal';
 
 const Hero = () => {
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showInteractionModal, setShowInteractionModal] = useState(false);
+
+  // Mock user location for AR Preview
+  const mockUserLocation = {
+    latitude: 34.0522265,
+    longitude: -118.2437408
+  };
+
+  // Enhanced fake agents with full data structure for AR Preview
+  const fakeAgents = [
+    {
+      id: 1,
+      name: "Cube 5",
+      description: "A 3D cube object deployed in AR space. I'm an AI agent ready to help with various tasks and answer questions.",
+      object_type: "AI Agent",
+      latitude: 34.0522365,
+      longitude: -118.2437408,
+      range_meters: 25,
+      interaction_fee: 10,
+      interaction_types: ["chat", "voice", "video"],
+      agent_wallet_type: "NEAR",
+      agent_wallet_address: "cube5.near",
+      mcp_integrations: ["Chat", "Voice", "Analysis", "Information Lookup"],
+      is_active: true
+    },
+    {
+      id: 2,
+      name: "Study Helper Alpha",
+      description: "Your friendly study companion! I help students with homework, explanations, and learning strategies.",
+      object_type: "Study Buddy",
+      latitude: 34.0522165,
+      longitude: -118.2437308,
+      range_meters: 30,
+      interaction_fee: 5,
+      interaction_types: ["chat", "voice"],
+      agent_wallet_type: "NEAR",
+      agent_wallet_address: "studyhelper.near",
+      mcp_integrations: ["Educational Content", "Study Planning", "Q&A"],
+      is_active: true
+    },
+    {
+      id: 3,
+      name: "Campus Guide Bot",
+      description: "I know everything about this location! Ask me about facilities, directions, or local information.",
+      object_type: "Local Services",
+      latitude: 34.0522465,
+      longitude: -118.2437508,
+      range_meters: 50,
+      interaction_fee: 8,
+      interaction_types: ["chat", "voice", "video"],
+      agent_wallet_type: "NEAR",
+      agent_wallet_address: "campusguide.near",
+      mcp_integrations: ["Location Services", "Directory", "Navigation"],
+      is_active: true
+    },
+    {
+      id: 4,
+      name: "Creative Assistant",
+      description: "Let's create something amazing together! I help with writing, brainstorming, and creative projects.",
+      object_type: "Content Creator",
+      latitude: 34.0522565,
+      longitude: -118.2437608,
+      range_meters: 35,
+      interaction_fee: 15,
+      interaction_types: ["chat", "voice", "video"],
+      agent_wallet_type: "NEAR",
+      agent_wallet_address: "creative.near",
+      mcp_integrations: ["Content Generation", "Brainstorming", "Writing"],
+      is_active: true
+    },
+    {
+      id: 5,
+      name: "Game Master",
+      description: "Ready to play? I create fun games, puzzles, and interactive experiences for entertainment!",
+      object_type: "Game Agent",
+      latitude: 34.0522665,
+      longitude: -118.2437708,
+      range_meters: 40,
+      interaction_fee: 12,
+      interaction_types: ["chat", "voice", "video"],
+      agent_wallet_type: "NEAR",
+      agent_wallet_address: "gamemaster.near",
+      mcp_integrations: ["Game Creation", "Puzzles", "Entertainment"],
+      is_active: true
+    }
+  ];
+
+  // Handle agent click for AR Preview
+  const handleAgentClick = (agent) => {
+    setSelectedAgent(agent);
+    setShowInteractionModal(true);
+  };
+
+  const handleCloseInteraction = () => {
+    setShowInteractionModal(false);
+    setSelectedAgent(null);
+  };
+
   const phones = [
     {
       id: 'deploy',
@@ -36,12 +136,39 @@ const Hero = () => {
       bgImage: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
       overlayContent: (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
+          {/* AR Preview Interactive Elements */}
           <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 text-center">
             <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Eye className="text-white text-2xl" />
             </div>
             <div className="font-bold text-sm">AR Testing Mode</div>
             <div className="text-xs opacity-80">View & interact with agents</div>
+          </div>
+          
+          {/* Interactive Agent Dots for AR Preview */}
+          <div className="absolute inset-0 pointer-events-none">
+            {fakeAgents.slice(0, 3).map((agent, index) => {
+              const positions = [
+                { top: '30%', left: '20%' },
+                { top: '50%', left: '70%' },
+                { top: '70%', left: '40%' }
+              ];
+              
+              return (
+                <motion.div
+                  key={agent.id}
+                  className="absolute w-4 h-4 bg-blue-400 rounded-full cursor-pointer pointer-events-auto hover:scale-125 transition-transform"
+                  style={positions[index]}
+                  onClick={() => handleAgentClick(agent)}
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                >
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold whitespace-nowrap">
+                    {agent.name}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
           <div className="absolute top-4 right-4 bg-green-500/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs flex items-center">
             <div className="w-2 h-2 rounded-full bg-green-300 mr-1"></div>
@@ -242,6 +369,14 @@ const Hero = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Enhanced Interaction Modal for AR Preview */}
+      <AgentInteractionModal
+        agent={selectedAgent}
+        visible={showInteractionModal}
+        onClose={handleCloseInteraction}
+        userLocation={mockUserLocation}
+      />
     </section>
   );
 };
