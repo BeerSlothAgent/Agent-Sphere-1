@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -15,7 +15,7 @@ import ARViewer from './components/ARViewer';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-let supabase = null;
+let supabase: SupabaseClient | null = null;
 
 // Only create Supabase client if both URL and key are provided and not placeholder values
 if (supabaseUrl && supabaseAnonKey && 
