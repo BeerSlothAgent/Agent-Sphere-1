@@ -42,6 +42,12 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [interactionFee, setInteractionFee] = useState('0.50');
   const [selectedMcpIntegrations, setSelectedMcpIntegrations] = useState<string[]>([]);
   const [interactionTypes, setInteractionTypes] = useState<string[]>(['text_chat']);
+  
+  // Notification system settings
+  const [enableProximityNotifications, setEnableProximityNotifications] = useState(true);
+  const [showOnMap, setShowOnMap] = useState(true);
+  const [notificationPriority, setNotificationPriority] = useState('normal');
+  const [mapMarkerStyle, setMapMarkerStyle] = useState('standard');
 
   // Deployment state
   const [isDeploying, setIsDeploying] = useState(false);
@@ -397,6 +403,10 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         defi_enabled: defiEnabled,
         mcp_integrations: selectedMcpIntegrations.length > 0 ? selectedMcpIntegrations : null,
         interaction_types: interactionTypes,
+        enable_proximity_notifications: enableProximityNotifications,
+        show_on_map: showOnMap,
+        notification_priority: notificationPriority,
+        map_marker_style: mapMarkerStyle,
         latitude: location.latitude,
         longitude: location.longitude,
         altitude: location.altitude,
@@ -472,6 +482,54 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const selectedWalletTypeData = walletTypes.find(type => type.value === selectedWalletType);
   const displayLocation = preciseLocation || location;
 
+  // Enhanced agent type descriptions with notification context
+  const agentTypeDescriptionsWithNotifications = {
+    'ai_agent': {
+      description: 'Intelligent assistant appearing as a glowing cube in AR',
+      notification: 'Users get notified when entering your AI agent\'s range and can interact via map or camera'
+    },
+    'study_buddy': {
+      description: 'Learning companion displayed as a knowledge sphere in AR',
+      notification: 'Students receive proximity alerts and can access study materials through map interface'
+    },
+    'tutor': {
+      description: 'Educational guide shown as a pointing pyramid in AR',
+      notification: 'Learners get notified when near tutoring sessions and can join via map or AR'
+    },
+    'landmark': {
+      description: 'Location marker appearing as a tall cylinder in AR',
+      notification: 'Visitors receive location-based notifications and can explore details on map'
+    },
+    'building': {
+      description: 'Architectural agent displayed as a prominent cube in AR',
+      notification: 'Users get building information alerts and can view details through map interface'
+    },
+    'Intelligent Assistant': {
+      description: 'Multi-faceted helper shown as an octahedron in AR',
+      notification: 'Users receive assistance notifications and can access help via map or camera'
+    },
+    'Content Creator': {
+      description: 'Creative agent appearing as a spinning torus in AR',
+      notification: 'Creators get notified about content opportunities and can engage through map'
+    },
+    'Local Services': {
+      description: 'Community service pillar displayed as a cylinder in AR',
+      notification: 'Locals receive service alerts and can access information via map interface'
+    },
+    'Tutor/Teacher': {
+      description: 'Educational pointer shown as a guidance pyramid in AR',
+      notification: 'Students get learning notifications and can join sessions through map or AR'
+    },
+    '3D World Modelling': {
+      description: 'Complex structure displayed as a large cube in AR',
+      notification: 'Users receive modeling alerts and can explore 3D content via map interface'
+    },
+    'Game Agent': {
+      description: 'Playful companion appearing as a small spinning sphere in AR',
+      notification: 'Players get game notifications and can join activities through map or camera'
+    }
+  };
+
   const isReadyToDeploy = location && agentName.trim() && !isDeploying;
 
   if (deploymentSuccess && deployedAgent) {
@@ -482,12 +540,50 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-8"
         >
-          <div className="text-center mb-8">
+          {/* Enhanced Success Header */}
+          <div className="text-center mb-6">
             <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">🎉 Agent Deployed Successfully!</h2>
-            <p className="text-gray-600">Your GeoAgent is now live on the NEAR blockchain and ready for AR</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Agent Deployed Successfully!</h2>
+            <p className="text-gray-600">Your GeoAgent is now live and ready for AR discovery!</p>
+          </div>
+
+          {/* Notification System Success Info */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-green-100 p-3 rounded border border-green-300">
+                <h4 className="font-medium text-green-800 mb-2 flex items-center">
+                  🔔 Notification System
+                </h4>
+                <ul className="text-xs text-green-700 space-y-1">
+                  <li>• Users get notified when entering {deployedAgent.range_meters}m range</li>
+                  <li>• Notification icon changes color and shows badge</li>
+                  <li>• Tap notification to see map with your agent</li>
+                  <li>• Priority: {deployedAgent.notification_priority || 'normal'}</li>
+                </ul>
+              </div>
+              
+              <div className="bg-green-100 p-3 rounded border border-green-300">
+                <h4 className="font-medium text-green-800 mb-2 flex items-center">
+                  🗺️ Map & AR Experience
+                </h4>
+                <ul className="text-xs text-green-700 space-y-1">
+                  <li>• Agent appears on nearby agents map</li>
+                  <li>• Shows {deployedAgent.range_meters}m range circle</li>
+                  <li>• Users can switch between map and AR camera</li>
+                  <li>• Marker style: {deployedAgent.map_marker_style || 'standard'}</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+              <p className="text-sm text-blue-800">
+                <strong>📱 User Journey:</strong> Users will discover your agent through proximity 
+                notifications, view it on the map with interaction details, and engage via AR camera. 
+                Test the experience by opening the AR Viewer app near the deployment location!
+              </p>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -548,7 +644,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
                 <div>
                   <span className="text-gray-600">Interaction Fee:</span>
-                  <p className="font-medium">{deployedAgent.interaction_fee_usdfc} USDFC</p>
+                  <p className="font-medium">{deployedAgent.interaction_fee_usdfc || deployedAgent.interaction_fee} USDFC</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">Notifications:</span>
+                  <p className="font-medium">{deployedAgent.enable_proximity_notifications ? 'Enabled' : 'Disabled'}</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">Map Visibility:</span>
+                  <p className="font-medium">{deployedAgent.show_on_map ? 'Visible' : 'Hidden'}</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Network:</span>
@@ -604,6 +708,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <span className="text-purple-700">Altitude:</span>
                   <p className="font-mono text-xs">{deployedAgent.precisealtitude?.toFixed(2) || deployedAgent.altitude?.toFixed(2) || 'N/A'}m</p>
                 </div>
+                <div>
+                  <span className="text-purple-700">Range:</span>
+                  <p className="font-bold text-purple-400">{deployedAgent.range_meters?.toFixed(1) || '25.0'}m</p>
+                </div>
+                <div>
+                  <span className="text-purple-700">Notification Range:</span>
+                  <p className="font-medium">{deployedAgent.range_meters?.toFixed(1)}m detection radius</p>
+                </div>
               </div>
             </div>
 
@@ -631,6 +743,18 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               >
                 Share
               </button>
+            </div>
+            
+            {/* AR Discovery Instructions */}
+            <div className="mt-4 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+              <h4 className="font-medium text-indigo-800 mb-2">🎯 Test Your Agent Discovery:</h4>
+              <ol className="text-sm text-indigo-700 space-y-1">
+                <li>1. Open AR Viewer app on your mobile device</li>
+                <li>2. Walk within {deployedAgent.range_meters}m of deployment location</li>
+                <li>3. Watch for notification icon to change color</li>
+                <li>4. Tap notification to see map with your agent</li>
+                <li>5. Switch to AR camera to interact with agent</li>
+              </ol>
             </div>
           </div>
         </motion.div>
@@ -804,6 +928,11 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   {selectedAgentTypeData && (
                     <p className="text-xs text-gray-500 mt-1">{selectedAgentTypeData.description}</p>
                   )}
+                  {agentTypeDescriptionsWithNotifications[selectedAgentType] && (
+                    <p className="text-xs text-blue-600 mt-2 italic">
+                      📱 {agentTypeDescriptionsWithNotifications[selectedAgentType].notification}
+                    </p>
+                  )}
                   
                   {/* 3D Object Preview */}
                   <div className="mt-3 bg-gray-50 p-3 rounded-lg">
@@ -858,6 +987,42 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     <p className="text-xs text-gray-500 mt-1">{selectedLocationTypeData.description}</p>
                   )}
                 </div>
+
+                {/* Range Visualization Info */}
+                {location && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h4 className="font-medium text-blue-800 mb-3 flex items-center">
+                      📍 Interaction Range & AR Notifications
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h5 className="font-medium text-blue-700 mb-2">Range Settings:</h5>
+                        <div className="text-sm text-blue-600 space-y-1">
+                          <p><strong>Detection Range:</strong> {rangeMeters}m radius</p>
+                          <p><strong>Notification Trigger:</strong> When users enter range</p>
+                          <p><strong>Map Visibility:</strong> Shows range circle</p>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-blue-700 mb-2">AR Experience:</h5>
+                        <div className="text-sm text-blue-600 space-y-1">
+                          <p>🔔 <strong>Notification:</strong> Icon changes color</p>
+                          <p>🗺️ <strong>Map View:</strong> Shows on nearby agents map</p>
+                          <p>📱 <strong>Interaction:</strong> Tap marker for details</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3 p-3 bg-blue-100 rounded border border-blue-300">
+                      <p className="text-sm text-blue-800">
+                        <strong>💡 User Journey:</strong> When users approach your agent, they'll receive 
+                        a notification and can view it on the map before switching to AR camera for interaction.
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -966,6 +1131,108 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 {selectedWalletTypeData && (
                   <p className="text-xs text-gray-500 mt-1">{selectedWalletTypeData.description}</p>
                 )}
+              </div>
+            </div>
+
+            {/* Notification & Discovery Settings */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                🔔 Notification & Discovery Settings
+              </h3>
+              
+              <div className="space-y-4">
+                {/* Notification Preferences */}
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-3">User Notification Preferences:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={enableProximityNotifications}
+                        onChange={(e) => setEnableProximityNotifications(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <span className="text-sm text-gray-700">
+                        Enable proximity notifications (recommended)
+                      </span>
+                    </label>
+                    
+                    <label className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={showOnMap}
+                        onChange={(e) => setShowOnMap(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <span className="text-sm text-gray-700">
+                        Show on nearby agents map
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Discovery Settings */}
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-3">Discovery Settings:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Notification Priority:
+                      </label>
+                      <select
+                        value={notificationPriority}
+                        onChange={(e) => setNotificationPriority(e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      >
+                        <option value="low">Low - Subtle notification</option>
+                        <option value="normal">Normal - Standard notification</option>
+                        <option value="high">High - Prominent notification</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Map Marker Style:
+                      </label>
+                      <select
+                        value={mapMarkerStyle}
+                        onChange={(e) => setMapMarkerStyle(e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      >
+                        <option value="standard">Standard - Type-based color</option>
+                        <option value="prominent">Prominent - Larger marker</option>
+                        <option value="minimal">Minimal - Small marker</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notification Preview */}
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <h5 className="font-medium text-gray-700 mb-3">Notification Preview:</h5>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      notificationPriority === 'high' ? 'bg-red-500' :
+                      notificationPriority === 'normal' ? 'bg-blue-500' : 'bg-gray-500'
+                    }`}>
+                      <span className="text-white text-xs">🔔</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">
+                        {agentName || 'Your Agent'} nearby
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {selectedAgentType.replace('_', ' ')} • {rangeMeters}m range • {interactionFee} USDFC
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3 p-2 bg-white rounded border">
+                    <p className="text-xs text-gray-600">
+                      <strong>Map Display:</strong> {mapMarkerStyle} marker with {rangeMeters}m range circle
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
