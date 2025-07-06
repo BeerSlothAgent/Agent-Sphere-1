@@ -412,7 +412,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
     try {
       // Generate agent wallet address (mock for now)
-      const agentWalletAddress = `0x${Math.random().toString(16).substr(2, 40)}`;
+      const agentWalletAddress = `0x${Math.random().toString(16).substring(2, 42)}`;
 
       // Prepare complete agent specification
       const agentData = {
