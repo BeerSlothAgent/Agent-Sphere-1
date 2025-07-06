@@ -288,7 +288,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         agent_wallet_address: blockchainResult.agentWalletAddress,
         agent_wallet_type: selectedWalletType,
         interaction_fee: parseFloat(interactionFee),
-        network: 'near-testnet',
+        network: 'near-testnet', // This now matches the database constraint
         contract_address: blockchainResult.agentContractId,
         deployment_tx: blockchainResult.transactionHash,
         deployment_block: blockchainResult.blockHeight,
