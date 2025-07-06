@@ -14,7 +14,6 @@ import {
   ChevronDown, 
   Bot, 
   GraduationCap, 
-  BookOpen, 
   MapPinIcon, 
   Building,
   Home,
@@ -26,8 +25,7 @@ import {
   DollarSign,
   Mic,
   MessageCircle,
-  Globe,
-  Sliders
+  Globe
 } from 'lucide-react';
 import { useAddress, useConnectionStatus } from '@thirdweb-dev/react';
 
@@ -463,8 +461,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         owner_wallet: address,
         deployment_cost: deploymentCost,
         interaction_fee: 1.0,
-        
-        is_active: true // Ensure GeoAgent is active for AR Viewer
       };
       console.log('🚀 Deploying Complete Agent Specification:', agentData);
 
@@ -1129,19 +1125,19 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Latitude:</span>
                     <span className="text-sm font-mono text-gray-900">
-                      {displayLocation.latitude?.toFixed(8) || displayLocation.preciseLatitude?.toFixed(8)}
+                      {(displayLocation as any).latitude?.toFixed(8) || (displayLocation as any).preciseLatitude?.toFixed(8)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Longitude:</span>
                     <span className="text-sm font-mono text-gray-900">
-                      {displayLocation.longitude?.toFixed(8) || displayLocation.preciseLongitude?.toFixed(8)}
+                      {(displayLocation as any).longitude?.toFixed(8) || (displayLocation as any).preciseLongitude?.toFixed(8)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Accuracy:</span>
                     <span className="text-sm text-gray-900">
-                      ±{displayLocation.accuracy?.toFixed(2) || '10.00'}m
+                      ±{(displayLocation as any).accuracy?.toFixed(2) || '10.00'}m
                     </span>
                   </div>
                 </div>
