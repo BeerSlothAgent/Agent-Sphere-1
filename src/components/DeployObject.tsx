@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Wallet, Globe, Settings, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain } from 'lucide-react';
+import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Wallet, Globe, Settings, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
 
 interface Location {
   latitude: number;
@@ -53,17 +53,105 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const ownerWallet = 'user123.testnet';
 
   const agentTypes = [
-    { value: 'ai_agent', label: 'AI Agent', description: 'General purpose AI assistant for various tasks and queries', icon: <Brain className="h-4 w-4" /> },
-    { value: 'study_buddy', label: 'Study Buddy', description: 'Educational companion for learning and study assistance', icon: <GraduationCap className="h-4 w-4" /> },
-    { value: 'tutor', label: 'Tutor', description: 'Specialized teaching agent for specific subjects', icon: <User className="h-4 w-4" /> },
-    { value: 'landmark', label: 'Landmark', description: 'Location-based information and historical context provider', icon: <Landmark className="h-4 w-4" /> },
-    { value: 'building', label: 'Building', description: 'Architectural and building-specific information agent', icon: <Building className="h-4 w-4" /> },
-    { value: 'Intelligent Assistant', label: 'Intelligent Assistant', description: 'Advanced AI assistant with enhanced capabilities', icon: <Brain className="h-4 w-4" /> },
-    { value: 'Content Creator', label: 'Content Creator', description: 'Creative agent for content generation and media creation', icon: <Palette className="h-4 w-4" /> },
-    { value: 'Local Services', label: 'Local Services', description: 'Local business and service information provider', icon: <Store className="h-4 w-4" /> },
-    { value: 'Tutor/Teacher', label: 'Tutor/Teacher', description: 'Professional educational instructor agent', icon: <GraduationCap className="h-4 w-4" /> },
-    { value: '3D World Modelling', label: '3D World Modelling', description: 'Spatial modeling and 3D environment creation agent', icon: <Cube className="h-4 w-4" /> },
-    { value: 'Game Agent', label: 'Game Agent', description: 'Interactive gaming and entertainment companion', icon: <Gamepad2 className="h-4 w-4" /> }
+    { 
+      value: 'ai_agent', 
+      label: 'AI Agent', 
+      description: 'General purpose AI assistant (appears as blue cube in AR)',
+      icon: <Brain className="h-4 w-4" />,
+      arObject: 'cube',
+      arColor: '#3B82F6',
+      arIcon: <Box className="h-6 w-6" />
+    },
+    { 
+      value: 'study_buddy', 
+      label: 'Study Buddy', 
+      description: 'Educational companion (appears as green sphere in AR)',
+      icon: <GraduationCap className="h-4 w-4" />,
+      arObject: 'sphere',
+      arColor: '#10B981',
+      arIcon: <Circle className="h-6 w-6" />
+    },
+    { 
+      value: 'tutor', 
+      label: 'Tutor', 
+      description: 'Specialized teaching agent (appears as purple pyramid in AR)',
+      icon: <User className="h-4 w-4" />,
+      arObject: 'pyramid',
+      arColor: '#7C3AED',
+      arIcon: <Triangle className="h-6 w-6" />
+    },
+    { 
+      value: 'landmark', 
+      label: 'Landmark', 
+      description: 'Location-based information provider (appears as orange cylinder in AR)',
+      icon: <Landmark className="h-4 w-4" />,
+      arObject: 'cylinder',
+      arColor: '#F97316',
+      arIcon: <Cylinder className="h-6 w-6" />
+    },
+    { 
+      value: 'building', 
+      label: 'Building', 
+      description: 'Architectural information agent (appears as gray cube in AR)',
+      icon: <Building className="h-4 w-4" />,
+      arObject: 'cube',
+      arColor: '#6B7280',
+      arIcon: <Box className="h-6 w-6" />
+    },
+    { 
+      value: 'Intelligent Assistant', 
+      label: 'Intelligent Assistant', 
+      description: 'Advanced AI assistant (appears as cyan octahedron in AR)',
+      icon: <Brain className="h-4 w-4" />,
+      arObject: 'octahedron',
+      arColor: '#06B6D4',
+      arIcon: <Octagon className="h-6 w-6" />
+    },
+    { 
+      value: 'Content Creator', 
+      label: 'Content Creator', 
+      description: 'Creative agent for content generation (appears as pink torus in AR)',
+      icon: <Palette className="h-4 w-4" />,
+      arObject: 'torus',
+      arColor: '#EC4899',
+      arIcon: <Circle className="h-6 w-6" />
+    },
+    { 
+      value: 'Local Services', 
+      label: 'Local Services', 
+      description: 'Local business information provider (appears as yellow cone in AR)',
+      icon: <Store className="h-4 w-4" />,
+      arObject: 'cone',
+      arColor: '#EAB308',
+      arIcon: <Triangle className="h-6 w-6" />
+    },
+    { 
+      value: 'Tutor/Teacher', 
+      label: 'Tutor/Teacher', 
+      description: 'Professional educational instructor (appears as indigo pyramid in AR)',
+      icon: <GraduationCap className="h-4 w-4" />,
+      arObject: 'pyramid',
+      arColor: '#4F46E5',
+      arIcon: <Triangle className="h-6 w-6" />
+    },
+    { 
+      value: '3D World Modelling', 
+      label: '3D World Modelling', 
+      description: 'Spatial modeling agent (appears as emerald dodecahedron in AR)',
+      icon: <Cube className="h-4 w-4" />,
+      arObject: 'dodecahedron',
+      arColor: '#059669',
+      arIcon: <Octagon className="h-6 w-6" />
+    },
+    { 
+      value: 'Game Agent', 
+      label: 'Game Agent', 
+      description: 'Interactive gaming companion (appears as red icosahedron in AR)',
+      icon: <Gamepad2 className="h-4 w-4" />,
+      arObject: 'icosahedron',
+      arColor: '#DC2626',
+      arIcon: <Octagon className="h-6 w-6" />
+    }
   ];
 
   const locationTypes = [
@@ -113,6 +201,40 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     };
     
     return walletFormats[walletType as keyof typeof walletFormats]?.() || 'Not Generated';
+  };
+
+  const get3DObjectName = (agentType: string): string => {
+    const agentTypeData = agentTypes.find(type => type.value === agentType);
+    return agentTypeData?.arObject || 'cube';
+  };
+
+  const get3DObjectIcon = (agentType: string) => {
+    const agentTypeData = agentTypes.find(type => type.value === agentType);
+    return agentTypeData?.arIcon || <Box className="h-6 w-6" />;
+  };
+
+  const get3DObjectColor = (agentType: string): string => {
+    const agentTypeData = agentTypes.find(type => type.value === agentType);
+    return agentTypeData?.arColor || '#3B82F6';
+  };
+
+  const validateARCompatibility = (agentData: any): boolean => {
+    const required = [
+      'object_type',
+      'name',
+      'interaction_fee_usdfc',
+      'agent_wallet_type',
+      'latitude',
+      'longitude'
+    ];
+    
+    const missing = required.filter(field => !agentData[field]);
+    
+    if (missing.length > 0) {
+      console.warn('Missing AR fields:', missing);
+    }
+    
+    return missing.length === 0;
   };
 
   const handleMcpToggle = (integrationId: string, checked: boolean) => {
@@ -287,13 +409,18 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         owner_wallet: ownerWallet,
         agent_wallet_address: blockchainResult.agentWalletAddress,
         agent_wallet_type: selectedWalletType,
-        interaction_fee: parseFloat(interactionFee),
+        interaction_fee_usdfc: parseFloat(interactionFee),
         network: 'near-testnet', // This now matches the database constraint
         contract_address: blockchainResult.agentContractId,
         deployment_tx: blockchainResult.transactionHash,
         deployment_block: blockchainResult.blockHeight,
         currency_type: 'USDFC'
       };
+
+      // Validate AR compatibility
+      if (!validateARCompatibility(agentData)) {
+        console.warn('Agent may not display properly in AR due to missing fields');
+      }
 
       console.log('💾 Saving agent to database:', agentData);
 
@@ -359,11 +486,51 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Agent Deployed Successfully!</h2>
-            <p className="text-gray-600">Your GeoAgent is now live on the NEAR blockchain</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">🎉 Agent Deployed Successfully!</h2>
+            <p className="text-gray-600">Your GeoAgent is now live on the NEAR blockchain and ready for AR</p>
           </div>
 
           <div className="space-y-6">
+            {/* AR Experience Summary */}
+            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+              <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                <Eye className="h-5 w-5 mr-2" />
+                AR Experience Ready
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-blue-700">3D Object:</span>
+                  <div className="flex items-center mt-1">
+                    <div 
+                      className="w-8 h-8 rounded flex items-center justify-center text-white mr-2"
+                      style={{ backgroundColor: get3DObjectColor(deployedAgent.object_type) }}
+                    >
+                      {get3DObjectIcon(deployedAgent.object_type)}
+                    </div>
+                    <span className="font-medium capitalize">{get3DObjectName(deployedAgent.object_type)}</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-blue-700">AR Positioning:</span>
+                  <p className="font-medium">±{deployedAgent.accuracy?.toFixed(deployedAgent.correctionapplied ? 2 : 0)}m accuracy</p>
+                </div>
+                <div>
+                  <span className="text-blue-700">Interaction Cost:</span>
+                  <p className="font-medium">{deployedAgent.interaction_fee_usdfc} USDFC per tap</p>
+                </div>
+                <div>
+                  <span className="text-blue-700">Visibility Range:</span>
+                  <p className="font-medium">{deployedAgent.range_meters}m radius</p>
+                </div>
+              </div>
+              <div className="mt-4 text-sm text-blue-800 space-y-1">
+                <p>• Agent appears as spinning 3D {get3DObjectName(deployedAgent.object_type)} in AR</p>
+                <p>• Positioned with {deployedAgent.correctionapplied ? 'centimeter' : 'meter'} precision</p>
+                <p>• Users can tap to interact and see agent details</p>
+                <p>• Ready for immersive AR experiences</p>
+              </div>
+            </div>
+
             <div className="bg-gray-50 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Deployment Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -381,7 +548,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
                 <div>
                   <span className="text-gray-600">Interaction Fee:</span>
-                  <p className="font-medium">{deployedAgent.interaction_fee} USDFC</p>
+                  <p className="font-medium">{deployedAgent.interaction_fee_usdfc} USDFC</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Network:</span>
@@ -453,6 +620,16 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View in AR
+              </button>
+              <button
+                onClick={() => {
+                  const shareText = `Check out my AI agent "${deployedAgent.name}" in AR! Located at ${deployedAgent.preciselatitude?.toFixed(6) || deployedAgent.latitude?.toFixed(6)}, ${deployedAgent.preciselongitude?.toFixed(6) || deployedAgent.longitude?.toFixed(6)}`;
+                  navigator.share?.({ title: 'AgentSphere Agent', text: shareText }) || 
+                  navigator.clipboard?.writeText(shareText);
+                }}
+                className="bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors"
+              >
+                Share
               </button>
             </div>
           </div>
@@ -569,6 +746,22 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                         </div>
                       )}
                     </div>
+                    
+                    {/* AR Experience Info */}
+                    <div className="mt-4 pt-3 border-t border-gray-200">
+                      <div className="bg-blue-50 p-3 rounded-lg">
+                        <h4 className="font-medium text-blue-900 mb-2 flex items-center">
+                          <Eye className="h-4 w-4 mr-2" />
+                          AR Experience
+                        </h4>
+                        <div className="text-sm text-blue-800 space-y-1">
+                          <p>• Agent will appear as 3D {get3DObjectName(selectedAgentType)} in AR</p>
+                          <p>• Positioned with ±{preciseLocation ? '2cm' : '10m'} accuracy using {preciseLocation ? 'RTK' : 'GPS'}</p>
+                          <p>• Visible from {rangeMeters}m distance</p>
+                          <p>• Clickable for interactions in AR Viewer</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -611,6 +804,23 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   {selectedAgentTypeData && (
                     <p className="text-xs text-gray-500 mt-1">{selectedAgentTypeData.description}</p>
                   )}
+                  
+                  {/* 3D Object Preview */}
+                  <div className="mt-3 bg-gray-50 p-3 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">AR Appearance Preview</h4>
+                    <div className="flex items-center space-x-3">
+                      <div 
+                        className="w-12 h-12 rounded-lg flex items-center justify-center text-white"
+                        style={{ backgroundColor: get3DObjectColor(selectedAgentType) }}
+                      >
+                        {get3DObjectIcon(selectedAgentType)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">3D Object: {get3DObjectName(selectedAgentType)}</p>
+                        <p className="text-xs text-gray-500">This is how your agent will appear in AR</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -844,6 +1054,22 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     <p className="text-xs text-gray-500 mt-1">
                       Set the fee users pay to interact with your agent
                     </p>
+                  </div>
+                  
+                  {/* AR Interaction Preview */}
+                  <div className="mt-3 bg-white p-3 rounded-lg border">
+                    <h5 className="font-medium text-purple-900 mb-2">AR Interaction Preview</h5>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">AR Display:</span>
+                        <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                          {agentName || 'Agent Name'} - {interactionFee || '0.50'} USDFC
+                        </span>
+                      </div>
+                      <p className="text-xs text-purple-700">
+                        Users will see this when they tap your agent in AR
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
