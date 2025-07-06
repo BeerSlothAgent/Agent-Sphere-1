@@ -29,7 +29,7 @@ import {
   Globe,
   Sliders
 } from 'lucide-react';
-import { useAddress, ConnectWallet } from '@thirdweb-dev/react';
+import { useAddress, useConnectionStatus } from '@thirdweb-dev/react';
 
 interface DeployObjectProps {
   supabase: any;
@@ -128,6 +128,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   
   const address = useAddress();
+  const connectionStatus = useConnectionStatus();
   
   // Define deployment network
   const deploymentNetwork = 'Avalanche Fuji';
@@ -572,35 +573,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             animate={{ opacity: 1, scale: 1 }}
             className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center">
               <div className="flex items-center">
                 <Wallet className="h-5 w-5 text-orange-600 mr-2" />
                 <div>
                   <span className="text-orange-800 font-medium">Wallet connection required</span>
                   <p className="text-orange-700 text-sm mt-1">
-                    <strong>RTK Enhancement:</strong> RTK positioning corrects your location to centimeter precision (±1cm)
+                    Please use the "Connect Wallet" button in the top navigation to connect your wallet and deploy agents.
                   </p>
                 </div>
-              </div>
-              <div className="ml-4">
-                <ConnectWallet 
-                  theme="light"
-                  btnTitle="Connect Wallet"
-                  modalTitle="Connect Wallet to AgentSphere"
-                  modalSize="compact"
-                  welcomeScreen={{
-                    title: "Connect to AgentSphere",
-                    subtitle: "Connect your wallet to deploy and manage AI agents"
-                  }}
-                  detailsBtn={() => {
-                    return (
-                      <div style={{ display: 'none' }} aria-hidden="true">
-                        Details
-                      </div>
-                    );
-                  }}
-                  className="!bg-orange-600 !text-white !rounded-lg !font-medium !px-4 !py-2 !text-sm"
-                />
               </div>
             </div>
           </motion.div>
@@ -1218,7 +1199,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 <span className="font-medium text-blue-800">Status</span>
               </div>
               <div className="text-sm text-blue-700">
-                {!address ? 'Please connect your wallet to deploy GeoAgents' :
+                {!address ? 'Please connect your wallet using the navigation bar to deploy agents' :
                  !supabase ? 'Database connection required' :
                  !location ? 'Getting location...' :
                  !agentName.trim() ? 'Enter agent name to continue' :
@@ -1248,6 +1229,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <div className={deploymentRequirements.notDeploying ? 'text-green-600' : 'text-red-600'}>
                     {deploymentRequirements.notDeploying ? '✅' : '❌'} Ready
                   </div>
+                </div>
+                <div className="mt-2 text-xs text-blue-600">
+                  Connection Status: {connectionStatus}
                 </div>
               </div>
             </div>
@@ -1304,7 +1288,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               ) : !address ? (
                 <>
                   <Wallet className="h-5 w-5 mr-2" />
-                  Connect Wallet to Deploy
+                  Connect Wallet in Navigation
                 </>
               ) : !supabase ? (
                 <>
