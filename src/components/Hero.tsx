@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Plus, Eye, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AgentInteractionModal from './interaction/AgentInteractionModal';
+import './interaction/ARPaymentStyles.css';
 
 const Hero = () => {
   const [selectedAgent, setSelectedAgent] = useState(null);

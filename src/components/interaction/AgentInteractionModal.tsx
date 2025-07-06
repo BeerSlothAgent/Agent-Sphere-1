@@ -14,8 +14,12 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Loader2
+  Loader2,
+  QrCode
 } from 'lucide-react';
+import { ARQRCodeGenerator, PaymentData, generateTransactionId } from './ARQRCodeGenerator';
+import { BlockchainPaymentSimulator } from './BlockchainPaymentSimulator';
+import './ARPaymentStyles.css';
 
 interface Agent {
   id: number;
@@ -76,6 +80,9 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
   const [selectedInteractionType, setSelectedInteractionType] = useState<'chat' | 'voice' | 'video'>('chat');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentStep, setPaymentStep] = useState<'selection' | 'qr-generated' | 'processing' | 'success'>('selection');
+  const [qrCodeData, setQrCodeData] = useState<PaymentData | null>(null);
+  const [paymentTimer, setPaymentTimer] = useState(300); // 5 minutes
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Calculate distance
@@ -175,19 +182,79 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
 
   const handleStartInteraction = (type: 'chat' | 'voice' | 'video') => {
     setSelectedInteractionType(type);
+    setPaymentStep('selection');
     setShowPaymentConfirm(true);
   };
 
-  const handleConfirmPayment = async () => {
-    setIsProcessingPayment(true);
+  const handleGenerateQRPayment = async () => {
+    if (!agent) return;
+
+    const paymentData: PaymentData = {
+      agentId: agent.name,
+      interactionType: selectedInteractionType,
+      amount: getInteractionFee(selectedInteractionType),
+      transactionId: generateTransactionId(),
+      timestamp: Date.now(),
+      walletAddress: 'user-wallet-address-here',
+      merchantAddress: agent.agent_wallet_address
+    };
+
+    setQrCodeData(paymentData);
+    setPaymentStep('qr-generated');
     
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Initialize AR QR Code Generator
+    const scene = document.querySelector('a-scene');
+    if (scene) {
+      const qrGenerator = new ARQRCodeGenerator(scene);
+      await qrGenerator.generateQRCode(paymentData);
+      
+      // Initialize blockchain payment simulator
+      const paymentSimulator = new BlockchainPaymentSimulator();
+      
+      // Set up global functions for AR integration
+      window.generateARQRCode = (data: PaymentData) => qrGenerator.generateQRCode(data);
+      window.removeARQRCode = () => qrGenerator.removeQRCode();
+      window.blockchainPaymentSimulator = paymentSimulator;
+      window.triggerPaymentSuccess = (data: PaymentData) => {
+        qrGenerator.removeQRCode();
+        setPaymentStep('success');
+        setTimeout(() => {
+          setShowPaymentConfirm(false);
+          setCurrentView(selectedInteractionType);
+          initializeConversation();
+        }, 2000);
+      };
+      window.enableChatInterface = (agentId: string, interactionType: string) => {
+        console.log(`✅ Chat enabled for ${agentId} - ${interactionType}`);
+      };
+      window.onPaymentExpired = () => {
+        setPaymentStep('selection');
+        setQrCodeData(null);
+      };
+    }
+    
+    // Start payment timer
+    startPaymentTimer();
+  };
+
+  const handleTraditionalPayment = async () => {
+    setIsProcessingPayment(true);
+    setPaymentStep('processing');
+    
+    // Simulate traditional payment processing
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     setIsProcessingPayment(false);
-    setShowPaymentConfirm(false);
-    setCurrentView(selectedInteractionType);
+    setPaymentStep('success');
     
+    setTimeout(() => {
+      setShowPaymentConfirm(false);
+      setCurrentView(selectedInteractionType);
+      initializeConversation();
+    }, 2000);
+  };
+
+  const initializeConversation = () => {
     // Initialize conversation with greeting
     const greeting = getAgentPersonality().greeting;
     setMessages([{
@@ -196,6 +263,41 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
       content: greeting,
       timestamp: new Date()
     }]);
+  };
+
+  const startPaymentTimer = () => {
+    setPaymentTimer(300); // Reset to 5 minutes
+    
+    const timer = setInterval(() => {
+      setPaymentTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          // Timer expired
+          if (window.removeARQRCode) {
+            window.removeARQRCode();
+          }
+          setPaymentStep('selection');
+          setQrCodeData(null);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+    
+  const handleCancelPayment = () => {
+    if (window.removeARQRCode) {
+      window.removeARQRCode();
+    }
+    setShowPaymentConfirm(false);
+    setPaymentStep('selection');
+    setQrCodeData(null);
   };
 
   const handleSendMessage = async () => {
@@ -239,6 +341,8 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
       setInputMessage('');
       setIsTyping(false);
       setShowPaymentConfirm(false);
+      setPaymentStep('selection');
+      setQrCodeData(null);
     }
   }, [visible, agent]);
 
@@ -497,46 +601,145 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white rounded-xl p-6 max-w-sm w-full mx-4"
+                className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
               >
-                <div className="text-center">
-                  <div className="mb-4">
-                    <Wallet size={48} className="mx-auto text-blue-500" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">Confirm Interaction</h3>
-                  <p className="text-gray-600 mb-4">
-                    Start {selectedInteractionType} with {agent.name}?
-                  </p>
-                  <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Cost:</span>
-                      <div className="flex items-center text-green-600 font-semibold">
-                        <DollarSign size={16} />
-                        <span>{getInteractionFee(selectedInteractionType)} USDFC</span>
+                {paymentStep === 'selection' && (
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <Wallet size={48} className="mx-auto text-blue-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Choose Payment Method</h3>
+                    <p className="text-gray-600 mb-4">
+                      Start {selectedInteractionType} with {agent.name}
+                    </p>
+                    <div className="bg-gray-50 rounded-lg p-3 mb-6">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Cost:</span>
+                        <div className="flex items-center text-green-600 font-semibold">
+                          <DollarSign size={16} />
+                          <span>{getInteractionFee(selectedInteractionType)} USDFC</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex space-x-3">
+                    
+                    {/* Revolutionary AR QR Payment Option */}
+                    <div className="space-y-3 mb-6">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleGenerateQRPayment}
+                        className="w-full p-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-lg transition-all"
+                      >
+                        <div className="flex items-center justify-center space-x-3">
+                          <QrCode size={24} />
+                          <div className="text-left">
+                            <div className="font-semibold">🚀 AR QR Payment</div>
+                            <div className="text-sm opacity-90">Scan QR code in AR space</div>
+                          </div>
+                        </div>
+                      </motion.button>
+                      
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleTraditionalPayment}
+                        className="w-full p-4 bg-blue-500 text-white rounded-xl hover:shadow-lg transition-all"
+                      >
+                        <div className="flex items-center justify-center space-x-3">
+                          <Wallet size={24} />
+                          <div className="text-left">
+                            <div className="font-semibold">Traditional Payment</div>
+                            <div className="text-sm opacity-90">Standard wallet payment</div>
+                          </div>
+                        </div>
+                      </motion.button>
+                    </div>
+                    
                     <button
-                      onClick={() => setShowPaymentConfirm(false)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                      disabled={isProcessingPayment}
+                      onClick={handleCancelPayment}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
                       Cancel
                     </button>
+                  </div>
+                )}
+                
+                {paymentStep === 'qr-generated' && qrCodeData && (
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <QrCode size={48} className="mx-auto text-purple-500 animate-pulse" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">🎯 AR QR Code Generated!</h3>
+                    <p className="text-gray-600 mb-4">
+                      Look around in AR to find the floating QR code near {agent.name}
+                    </p>
+                    
+                    <div className="bg-purple-50 rounded-lg p-4 mb-4">
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Amount:</span>
+                          <span className="font-semibold">{qrCodeData.amount} USDFC</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Agent:</span>
+                          <span className="font-semibold">{qrCodeData.agentId}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Expires in:</span>
+                          <span className="font-semibold text-orange-600">{formatTime(paymentTimer)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-blue-50 rounded-lg p-3 mb-4">
+                      <p className="text-sm text-blue-800">
+                        💡 <strong>Instructions:</strong> The QR code is floating in AR space near the agent. 
+                        Point your camera around to find it, then tap to scan and complete payment.
+                      </p>
+                    </div>
+                    
                     <button
-                      onClick={handleConfirmPayment}
-                      disabled={isProcessingPayment}
-                      className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center"
+                      onClick={handleCancelPayment}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      {isProcessingPayment ? (
-                        <Loader2 size={16} className="animate-spin" />
-                      ) : (
-                        'Confirm'
-                      )}
+                      Cancel Payment
                     </button>
                   </div>
-                </div>
+                )}
+                
+                {paymentStep === 'processing' && (
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <Loader2 size={48} className="mx-auto text-blue-500 animate-spin" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Processing Payment...</h3>
+                    <p className="text-gray-600 mb-4">
+                      Please wait while we process your payment
+                    </p>
+                    <div className="bg-blue-50 rounded-lg p-3">
+                      <p className="text-sm text-blue-800">
+                        🔒 Secured by NEAR Protocol
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {paymentStep === 'success' && (
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <CheckCircle size={48} className="mx-auto text-green-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">🎉 Payment Successful!</h3>
+                    <p className="text-gray-600 mb-4">
+                      You can now interact with {agent.name}
+                    </p>
+                    <div className="bg-green-50 rounded-lg p-3">
+                      <p className="text-sm text-green-800">
+                        ✅ Chat interface will open automatically
+                      </p>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             </motion.div>
           )}

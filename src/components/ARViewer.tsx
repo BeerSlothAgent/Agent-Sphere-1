@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Crosshair, AlertCircle, Loader2, Eye, RotateCcw, Info } from 'lucide-react';
 import 'aframe';
 import AgentInteractionModal from './interaction/AgentInteractionModal';
+import './interaction/ARPaymentStyles.css';
 
 interface DeployedObject {
   id: string;
