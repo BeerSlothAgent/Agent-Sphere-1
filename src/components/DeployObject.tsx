@@ -40,6 +40,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [defiEnabled, setDefiEnabled] = useState(false);
   const [selectedWalletType, setSelectedWalletType] = useState('mynearwallet');
   const [interactionFee, setInteractionFee] = useState('0.50');
+  const [selectedMcpIntegrations, setSelectedMcpIntegrations] = useState<string[]>([]);
+  const [interactionTypes, setInteractionTypes] = useState<string[]>(['text_chat']);
 
   // Deployment state
   const [isDeploying, setIsDeploying] = useState(false);
@@ -79,6 +81,29 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     { value: 'flow_wallet', label: 'Flow Wallet', description: 'Flow blockchain wallet integration' }
   ];
 
+  // MCP Server Integrations - Complete List
+  const mcpIntegrations = [
+    // Left Column
+    { id: 'weather', label: 'weather', description: 'Weather information and forecasts' },
+    { id: 'directions', label: 'directions', description: 'Navigation and route planning' },
+    { id: 'calculator', label: 'calculator', description: 'Mathematical calculations' },
+    { id: 'qr_generator', label: 'qr generator', description: 'QR code generation' },
+    { id: 'local_business', label: 'local business', description: 'Local business information' },
+    { id: 'spatial_analysis', label: 'spatial analysis', description: 'Geographic and spatial data analysis' },
+    { id: 'content_generation', label: 'content generation', description: 'AI-powered content creation' },
+    { id: 'social_sharing', label: 'social sharing', description: 'Social media integration' },
+
+    // Right Column  
+    { id: 'location_info', label: 'location info', description: 'Detailed location information' },
+    { id: 'search', label: 'search', description: 'Web search capabilities' },
+    { id: 'educational_content', label: 'educational content', description: 'Learning materials and resources' },
+    { id: 'study_planner', label: 'study planner', description: 'Study schedule and planning tools' },
+    { id: '3d_modeling', label: '3d modeling', description: '3D model creation and manipulation' },
+    { id: 'architecture', label: 'architecture', description: 'Architectural design and analysis' },
+    { id: 'media_creation', label: 'media creation', description: 'Multimedia content creation' },
+    { id: 'game_tools', label: 'game tools', description: 'Gaming utilities and tools' }
+  ];
+
   const generateFakeAgentWallet = (walletType: string): string => {
     const walletFormats = {
       mynearwallet: () => `agent_${Math.random().toString(36).substr(2, 8)}.testnet`,
@@ -88,6 +113,22 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     };
     
     return walletFormats[walletType as keyof typeof walletFormats]?.() || 'Not Generated';
+  };
+
+  const handleMcpToggle = (integrationId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedMcpIntegrations(prev => [...prev, integrationId]);
+    } else {
+      setSelectedMcpIntegrations(prev => prev.filter(id => id !== integrationId));
+    }
+  };
+
+  const handleInteractionTypeToggle = (type: string, checked: boolean) => {
+    if (checked) {
+      setInteractionTypes(prev => [...prev, type]);
+    } else {
+      setInteractionTypes(prev => prev.filter(t => t !== type));
+    }
   };
 
   const getCurrentLocation = () => {
@@ -232,6 +273,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         chat_enabled: chatEnabled,
         voice_enabled: voiceEnabled,
         defi_enabled: defiEnabled,
+        mcp_integrations: selectedMcpIntegrations.length > 0 ? selectedMcpIntegrations : null,
+        interaction_types: interactionTypes,
         latitude: location.latitude,
         longitude: location.longitude,
         altitude: location.altitude,
@@ -288,6 +331,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     setDefiEnabled(false);
     setSelectedWalletType('mynearwallet');
     setInteractionFee('0.50');
+    setSelectedMcpIntegrations([]);
+    setInteractionTypes(['text_chat']);
     setLocation(null);
     setPreciseLocation(null);
     setDeploymentSuccess(false);
@@ -624,7 +669,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               {/* Capabilities */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Agent Capabilities
+                  Core Interaction Methods
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
@@ -671,6 +716,27 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
               </div>
 
+              {/* MCP Server Integrations */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-gray-900">MCP Server Integrations</h4>
+                <div className="grid grid-cols-2 gap-4 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-4">
+                  {mcpIntegrations.map((integration) => (
+                    <label key={integration.id} className="flex items-start space-x-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selectedMcpIntegrations.includes(integration.id)}
+                        onChange={(e) => handleMcpToggle(integration.id, e.target.checked)}
+                        className="mt-0.5 rounded border-gray-300"
+                      />
+                      <div>
+                        <span className="font-medium">{integration.label}</span>
+                        <p className="text-xs text-gray-500">{integration.description}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               {/* Wallet Configuration */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -690,6 +756,67 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 {selectedWalletTypeData && (
                   <p className="text-xs text-gray-500 mt-1">{selectedWalletTypeData.description}</p>
                 )}
+              </div>
+            </div>
+
+            {/* Interaction Types Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center space-x-2">
+                <span>💬</span>
+                <span>Interaction Types</span>
+              </h3>
+              
+              <div className="grid grid-cols-1 gap-3">
+                {/* Text Chat */}
+                <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={interactionTypes.includes('text_chat')}
+                    onChange={(e) => handleInteractionTypeToggle('text_chat', e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xl">💬</span>
+                    <div>
+                      <span className="font-medium">Text Chat</span>
+                      <p className="text-sm text-gray-500">Enable text-based conversations</p>
+                    </div>
+                  </div>
+                </label>
+
+                {/* Voice Interface */}
+                <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={interactionTypes.includes('voice_interface')}
+                    onChange={(e) => handleInteractionTypeToggle('voice_interface', e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xl">🎤</span>
+                    <div>
+                      <span className="font-medium">Voice Interface</span>
+                      <p className="text-sm text-gray-500">Enable voice interactions (+50 USDFC)</p>
+                    </div>
+                  </div>
+                </label>
+
+                {/* Video Interface */}
+                <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={interactionTypes.includes('video_interface')}
+                    onChange={(e) => handleInteractionTypeToggle('video_interface', e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xl">📹</span>
+                    <div>
+                      <span className="font-medium">Video Interface</span>
+                      <p className="text-sm text-gray-500">Enable video conversations (+100 USDFC)</p>
+                    </div>
+                  </div>
+                </label>
               </div>
             </div>
 
