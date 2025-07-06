@@ -84,6 +84,8 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
   const [qrCodeData, setQrCodeData] = useState<PaymentData | null>(null);
   const [paymentTimer, setPaymentTimer] = useState(300); // 5 minutes
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [scanningState, setScanningState] = useState<'waiting' | 'scanning' | 'success'>('waiting');
+  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
 
   // Calculate distance
   const distance = userLocation && agent ? 
@@ -235,6 +237,35 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
     
     // Start payment timer
     startPaymentTimer();
+  };
+
+  const handleQRScanSimulation = async () => {
+    setScanningState('scanning');
+    
+    // Simulate scanning delay
+    setTimeout(() => {
+      setScanningState('success');
+      triggerBlockchainWallet();
+    }, 2000);
+  };
+
+  const triggerBlockchainWallet = () => {
+    if (!qrCodeData) return;
+    
+    // Initialize blockchain payment simulator
+    const paymentSimulator = new BlockchainPaymentSimulator();
+    paymentSimulator.simulatePayment(qrCodeData).then(() => {
+      setPaymentStep('success');
+      setTimeout(() => {
+        setShowPaymentConfirm(false);
+        setCurrentView(selectedInteractionType);
+        initializeConversation();
+      }, 2000);
+    }).catch(() => {
+      // Payment cancelled or failed
+      setPaymentStep('selection');
+      setQrCodeData(null);
+    });
   };
 
   const handleTraditionalPayment = async () => {
@@ -665,46 +696,12 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
                 )}
                 
                 {paymentStep === 'qr-generated' && qrCodeData && (
-                  <div className="text-center">
-                    <div className="mb-4">
-                      <QrCode size={48} className="mx-auto text-purple-500 animate-pulse" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2">🎯 AR QR Code Generated!</h3>
-                    <p className="text-gray-600 mb-4">
-                      Look around in AR to find the floating QR code near {agent.name}
-                    </p>
-                    
-                    <div className="bg-purple-50 rounded-lg p-4 mb-4">
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Amount:</span>
-                          <span className="font-semibold">{qrCodeData.amount} USDFC</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Agent:</span>
-                          <span className="font-semibold">{qrCodeData.agentId}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Expires in:</span>
-                          <span className="font-semibold text-orange-600">{formatTime(paymentTimer)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                      <p className="text-sm text-blue-800">
-                        💡 <strong>Instructions:</strong> The QR code is floating in AR space near the agent. 
-                        Point your camera around to find it, then tap to scan and complete payment.
-                      </p>
-                    </div>
-                    
-                    <button
-                      onClick={handleCancelPayment}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                      Cancel Payment
-                    </button>
-                  </div>
+                  <ARQRModal 
+                    paymentData={qrCodeData}
+                    paymentTimer={paymentTimer}
+                    onClose={handleCancelPayment}
+                    onScanSimulation={handleQRScanSimulation}
+                  />
                 )}
                 
                 {paymentStep === 'processing' && (
@@ -750,3 +747,158 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
 };
 
 export default AgentInteractionModal;
+
+// AR QR Modal Component with Large QR Display
+interface ARQRModalProps {
+  paymentData: PaymentData;
+  paymentTimer: number;
+  onClose: () => void;
+  onScanSimulation: () => void;
+}
+
+const ARQRModal: React.FC<ARQRModalProps> = ({ 
+  paymentData, 
+  paymentTimer, 
+  onClose, 
+  onScanSimulation 
+}) => {
+  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
+  const [scanningState, setScanningState] = useState<'waiting' | 'scanning' | 'success'>('waiting');
+
+  useEffect(() => {
+    generateLargeQRCode();
+  }, []);
+
+  const generateLargeQRCode = async () => {
+    try {
+      // Create blockchain transaction data
+      const blockchainData = {
+        to: paymentData.merchantAddress,
+        amount: paymentData.amount,
+        currency: 'USDFC',
+        memo: `Payment for ${paymentData.interactionType} with ${paymentData.agentId}`,
+        transactionId: paymentData.transactionId,
+        network: 'NEAR',
+        timestamp: paymentData.timestamp
+      };
+
+      // Generate QR code using QR.js
+      const QR = await import('qrcode');
+      const qrDataURL = await QR.toDataURL(JSON.stringify(blockchainData), {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'M'
+      });
+      setQrCodeDataURL(qrDataURL);
+    } catch (error) {
+      console.error('QR generation failed:', error);
+    }
+  };
+
+  const handleSimulateQRScan = () => {
+    setScanningState('scanning');
+    onScanSimulation();
+  };
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div className="ar-qr-modal-content">
+      <div className="qr-header">
+        <h3>🎯 AR QR Code Generated!</h3>
+        <button className="close-btn" onClick={onClose}>×</button>
+      </div>
+
+      {/* Large QR Code Display */}
+      <div className="qr-display-section">
+        <div className="qr-code-container">
+          {qrCodeDataURL ? (
+            <img 
+              src={qrCodeDataURL} 
+              alt="Payment QR Code" 
+              className="large-qr-code"
+            />
+          ) : (
+            <div className="qr-loading">
+              <div className="spinner"></div>
+              <p>Generating QR Code...</p>
+            </div>
+          )}
+          
+          {/* QR Code Overlay Effects */}
+          <div className="qr-overlay">
+            <div className="scanning-line"></div>
+            <div className="corner-markers">
+              <div className="corner top-left"></div>
+              <div className="corner top-right"></div>
+              <div className="corner bottom-left"></div>
+              <div className="corner bottom-right"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scanning Animation */}
+        {scanningState === 'scanning' && (
+          <div className="scanning-animation">
+            <div className="scan-beam"></div>
+            <p>📱 Scanning QR Code...</p>
+          </div>
+        )}
+      </div>
+
+      {/* Payment Details */}
+      <div className="payment-details">
+        <div className="detail-row">
+          <span>Amount:</span>
+          <span className="amount">{paymentData.amount} USDFC</span>
+        </div>
+        <div className="detail-row">
+          <span>Agent:</span>
+          <span>{paymentData.agentId}</span>
+        </div>
+        <div className="detail-row">
+          <span>Service:</span>
+          <span>{paymentData.interactionType.toUpperCase()} CHAT</span>
+        </div>
+        <div className="detail-row">
+          <span>Expires in:</span>
+          <span className="timer">{formatTime(paymentTimer)}</span>
+        </div>
+      </div>
+
+      {/* Instructions */}
+      <div className="instructions">
+        <p>📱 <strong>Instructions:</strong> The QR code is floating in AR space near the agent. Point your camera around to find it, then tap to scan and complete payment.</p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="qr-actions">
+        <button 
+          className="btn-simulate-scan"
+          onClick={handleSimulateQRScan}
+          disabled={scanningState !== 'waiting'}
+        >
+          {scanningState === 'waiting' && '📱 Simulate QR Scan'}
+          {scanningState === 'scanning' && '⏳ Scanning...'}
+          {scanningState === 'success' && '✅ Scanned!'}
+        </button>
+        <button className="btn-cancel" onClick={onClose}>
+          Cancel Payment
+        </button>
+      </div>
+
+      {/* AR Simulation Note */}
+      <div className="ar-note">
+        <small>💡 In real AR: Look around to find the floating QR code near {paymentData.agentId}</small>
+      </div>
+    </div>
+  );
+};

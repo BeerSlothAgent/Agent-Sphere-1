@@ -1,5 +1,318 @@
 /* AR QR Payment System Styles */
 
+/* AR QR Modal Styling */
+.ar-qr-modal-content {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  color: white;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 2px solid #00ff88;
+}
+
+.qr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.qr-header h3 {
+  margin: 0;
+  color: #00ff88;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.qr-display-section {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.qr-code-container {
+  position: relative;
+  display: inline-block;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+}
+
+.large-qr-code {
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+}
+
+.qr-loading {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.qr-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ddd;
+  border-top: 3px solid #00ff88;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.qr-loading p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+.qr-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  pointer-events: none;
+}
+
+.scanning-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ff88, transparent);
+  animation: scanLine 2s linear infinite;
+}
+
+.corner-markers .corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #00ff88;
+}
+
+.corner.top-left {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner.top-right {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.corner.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.scanning-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 255, 136, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  animation: pulse 1s infinite;
+  z-index: 10;
+}
+
+.scan-beam {
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  margin-bottom: 10px;
+  animation: scanBeam 1s linear infinite;
+}
+
+.payment-details {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  font-size: 0.95em;
+}
+
+.detail-row span:first-child {
+  color: #ccc;
+}
+
+.detail-row span:last-child {
+  color: #fff;
+  font-weight: 500;
+}
+
+.amount {
+  color: #00ff88;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.timer {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.instructions {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.instructions p {
+  margin: 0;
+  color: #93c5fd;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.qr-actions {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.btn-simulate-scan {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-simulate-scan:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+}
+
+.btn-simulate-scan:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-simulate-scan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-simulate-scan:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.btn-cancel {
+  background: #333;
+  color: white;
+  border: 1px solid #555;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.btn-cancel:hover {
+  background: #555;
+  transform: translateY(-1px);
+}
+
+.ar-note {
+  text-align: center;
+  padding: 15px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.ar-note small {
+  color: #c4b5fd;
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+
+/* Enhanced Animations */
+@keyframes scanLine {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(300px); }
+}
+
+@keyframes scanBeam {
+  0% { transform: translateX(-100px); }
+  100% { transform: translateX(100px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
 .wallet-popup {
   position: fixed;
   top: 0;

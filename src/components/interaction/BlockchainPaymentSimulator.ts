@@ -19,7 +19,7 @@ export class BlockchainPaymentSimulator {
       return { success: true, transactionHash: this.generateTxHash() };
     } catch (error) {
       console.error('Payment simulation failed:', error);
-      return { success: false, error: 'Payment cancelled or failed' };
+      throw error; // Re-throw to be handled by the modal
     }
   }
 
@@ -55,7 +55,7 @@ export class BlockchainPaymentSimulator {
             </div>
             <div class="detail-row">
               <span>Memo:</span>
-              <span class="memo">${qrData.interactionType} with ${qrData.agentId}</span>
+              <span class="memo">Payment for ${qrData.interactionType} with ${qrData.agentId}</span>
             </div>
           </div>
           
@@ -127,6 +127,7 @@ export class BlockchainPaymentSimulator {
     
     // Show success
     const txHash = this.generateTxHash();
+    const blockHeight = this.generateBlockHeight();
     walletContent.innerHTML = `
       <div class="success-state">
         <div class="success-icon">✅</div>
@@ -142,7 +143,7 @@ export class BlockchainPaymentSimulator {
         <div class="transaction-details-success">
           <div class="detail-row">
             <span>Block Height:</span>
-            <span>${this.generateBlockHeight()}</span>
+            <span>${blockHeight}</span>
           </div>
           <div class="detail-row">
             <span>Gas Used:</span>
@@ -151,6 +152,10 @@ export class BlockchainPaymentSimulator {
           <div class="detail-row">
             <span>Status:</span>
             <span class="status-success">Confirmed</span>
+          </div>
+          <div class="detail-row">
+            <span>Network:</span>
+            <span>NEAR Mainnet</span>
           </div>
         </div>
         <button class="btn-close">Close</button>
