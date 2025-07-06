@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: [
+      'bech32',
       'bn.js', 
       'js-sha3',
       'hash.js',
