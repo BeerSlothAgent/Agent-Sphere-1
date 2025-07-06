@@ -10,6 +10,8 @@ declare global {
       'a-box': any;
       'a-sphere': any;
       'a-cone': any;
+      'a-light': any;
+      'a-plane': any;
     }
   }
 }

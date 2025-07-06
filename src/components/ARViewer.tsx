@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Camera, MapPin, Crosshair, AlertCircle, Loader2, Eye, RotateCcw, Info } from 'lucide-react';
+import { MapPin, Crosshair, AlertCircle, Loader2, Eye, RotateCcw, Info } from 'lucide-react';
 import 'aframe';
 
 interface DeployedObject {
@@ -40,7 +40,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [error, setError] = useState<string>('');
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [selectedObject, setSelectedObject] = useState<DeployedObject | null>(null);
-  const [arMode, setArMode] = useState<'demo' | 'camera'>('demo');
   const [showInteractionPanel, setShowInteractionPanel] = useState<boolean>(false);
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'agent', message: string}>>([]);
   const [currentMessage, setCurrentMessage] = useState<string>('');
