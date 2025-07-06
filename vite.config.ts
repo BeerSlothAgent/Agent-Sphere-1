@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['bn.js'],
+    include: ['bn.js', 'js-sha3'],
     exclude: [
       'hash.js',
       'md5.js',
