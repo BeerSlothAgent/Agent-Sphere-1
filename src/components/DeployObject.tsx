@@ -72,7 +72,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     },
     { 
       value: 'study_buddy', 
-      label: 'Study Buddy', 
+      label: 'NEAR Study Buddy',
       description: 'Educational companion (appears as green sphere in AR)',
       icon: <GraduationCap className="h-4 w-4" />,
       arObject: 'sphere',
@@ -81,7 +81,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     },
     { 
       value: 'tutor', 
-      label: 'Tutor', 
+      label: 'NEAR Tutor', 
       description: 'Specialized teaching agent (appears as purple pyramid in AR)',
       icon: <User className="h-4 w-4" />,
       arObject: 'pyramid',
