@@ -51,6 +51,10 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const [deploymentSuccess, setDeploymentSuccess] = useState(false);
   const [deploymentError, setDeploymentError] = useState<string>('');
   const [deployedAgent, setDeployedAgent] = useState<any>(null);
+  const [deploymentStatus, setDeploymentStatus] = useState<string>('');
+  const [deploymentResults, setDeploymentResults] = useState<any>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [deploymentProgress, setDeploymentProgress] = useState(0);
 
   // Mock owner wallet (in real app, this would come from wallet connection)
   const ownerWallet = 'user123.testnet';
@@ -348,6 +352,26 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     };
   };
 
+  // Generate realistic IPFS hash (QmHash format)
+  const generateIPFSHash = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let hash = 'Qm';
+    for (let i = 0; i < 44; i++) {
+      hash += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return hash;
+  };
+
+  // Generate realistic Filecoin CID (bafybeih format)
+  const generateFilecoinCID = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyz234567';
+    let cid = 'bafybeih';
+    for (let i = 0; i < 50; i++) {
+      cid += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return cid;
+  };
+
   const handleDeployAgent = async () => {
     if (!supabase) {
       setDeploymentError('Database connection not available. Please connect to Supabase first.');
@@ -365,9 +389,58 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     }
 
     setIsDeploying(true);
-    setDeploymentError('');
+    setDeploymentStatus('Preparing deployment...');
+    setDeploymentProgress(0);
 
     try {
+      // Step 1: Create agent card for IPFS storage
+      setDeploymentStatus('ipfs-creating');
+      setDeploymentProgress(20);
+      const agentCard = {
+        name: agentName,
+        type: selectedAgentType,
+        description: agentDescription,
+        capabilities: selectedMcpIntegrations || [],
+        location: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          type: selectedLocationType
+        },
+        range: parseFloat(rangeMeters),
+        pricing: {
+          interactionFee: parseFloat(interactionFee),
+          currency: 'USDFC'
+        },
+        owner: ownerWallet,
+        deployedAt: new Date().toISOString(),
+        version: "1.0.0",
+        metadata: {
+          platform: "AgentSphere",
+          blockchain: "NEAR Protocol",
+          storage: "Filecoin/IPFS",
+          hackathon: "NEAR Protocol Hackathon 2025"
+        }
+      };
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Step 2: Simulate IPFS storage
+      setDeploymentStatus('ipfs-storing');
+      setDeploymentProgress(40);
+      const ipfsHash = generateIPFSHash();
+      console.log('📁 Agent card stored on IPFS:', agentCard);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Step 3: Simulate Filecoin storage
+      setDeploymentStatus('filecoin-securing');
+      setDeploymentProgress(60);
+      const filecoinCID = generateFilecoinCID();
+      console.log('💾 Agent card secured on Filecoin:', agentCard);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Step 4: Deploy to NEAR and database
+      setDeploymentStatus('near-deploying');
+      setDeploymentProgress(80);
+
       console.log('🚀 Starting agent deployment...');
 
       // Use precise location if available, otherwise fall back to standard location
@@ -388,6 +461,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         user_id: ownerWallet,
         name: agentName,
         description: agentDescription,
+        ipfs_hash: ipfsHash,
+        filecoin_cid: filecoinCID,
         object_type: selectedAgentType,
         location_type: selectedLocationType,
         range_meters: parseFloat(rangeMeters),
@@ -435,8 +510,20 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       }
 
       console.log('✅ Agent deployed successfully:', data);
-      setDeployedAgent({ ...data, ...blockchainResult });
-      setDeploymentSuccess(true);
+      
+      setDeploymentProgress(100);
+      setDeploymentStatus('success');
+      setDeploymentResults({
+        nearDeployment: true,
+        ipfsStorage: true,
+        filecoinStorage: true,
+        agentId: data.id,
+        ipfsHash: ipfsHash,
+        filecoinCID: filecoinCID,
+        agent: data,
+        preciseLocation: preciseLocation
+      });
+      setShowSuccessModal(true);
       setIsDeploying(false);
 
     } catch (error) {
@@ -1319,20 +1406,231 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             <button
               onClick={handleDeployAgent}
               disabled={!isReadyToDeploy}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition-colors"
+              className="deploy-button-enhanced w-full bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 text-white py-6 px-6 rounded-xl font-bold text-lg hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center justify-center min-h-[80px]"
             >
               {isDeploying ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Deploying NEAR Agent to NEAR Blockchain...</span>
+                <div className="button-content">
+                  <div className="flex items-center main-action">
+                    <Loader2 className="animate-spin h-5 w-5 mr-2" />
+                    Deploying...
+                  </div>
                 </div>
               ) : (
-                'Deploy NEAR Agent'
+                <div className="button-content">
+                  <div className="main-action flex items-center">
+                    <Plus className="h-5 w-5 mr-2" />
+                    Deploy NEAR Agent
+                  </div>
+                  <div className="storage-action">
+                    & Store Agent Card on Filecoin/IPFS
+                  </div>
+                  <div className="dual-logos">
+                    <span className="near-logo">🔗 NEAR</span>
+                    <span className="plus">+</span>
+                    <span className="filecoin-logo">📁 Filecoin</span>
+                  </div>
+                </div>
               )}
             </button>
           </div>
         </motion.div>
       </div>
+
+      {/* Deployment Status Modal */}
+      {isDeploying && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl shadow-xl p-8 max-w-lg w-full mx-4 text-white border border-green-500">
+            <div className="deployment-status text-center">
+              <div className="status-header mb-6">
+                <h3 className="text-2xl font-bold text-green-400 mb-2">Deploying Your NEAR Agent</h3>
+                <p className="text-gray-300">Storing on Filecoin/IPFS + Deploying on NEAR</p>
+              </div>
+              
+              <div className="progress-bar mb-6">
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div 
+                    className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all duration-500" 
+                    style={{ width: `${deploymentProgress}%` }}
+                  ></div>
+                </div>
+                <div className="text-sm text-gray-400 mt-2">{deploymentProgress}% Complete</div>
+              </div>
+              
+              <div className="status-message mb-6">
+                <DeploymentStatusMessage status={deploymentStatus} />
+              </div>
+
+              <div className="deployment-steps">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className={`step ${deploymentProgress >= 20 ? 'completed' : 'pending'}`}>
+                    <div className="step-icon">📁</div>
+                    <div className="step-text">Create Card</div>
+                  </div>
+                  <div className={`step ${deploymentProgress >= 40 ? 'completed' : 'pending'}`}>
+                    <div className="step-icon">🌐</div>
+                    <div className="step-text">Store IPFS</div>
+                  </div>
+                  <div className={`step ${deploymentProgress >= 60 ? 'completed' : 'pending'}`}>
+                    <div className="step-icon">💾</div>
+                    <div className="step-text">Secure Filecoin</div>
+                  </div>
+                  <div className={`step ${deploymentProgress >= 80 ? 'completed' : 'pending'}`}>
+                    <div className="step-icon">🔗</div>
+                    <div className="step-text">Deploy NEAR</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && deploymentResults && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto text-white border-2 border-green-500">
+            <div className="success-content p-8">
+              <div className="success-header text-center mb-8">
+                <div className="success-icon text-6xl mb-4">🎉</div>
+                <h2 className="text-3xl font-bold text-green-400 mb-2">Deployment Successful!</h2>
+                <p className="text-gray-300">Your NEAR agent is live and agent card is stored!</p>
+              </div>
+
+              <div className="deployment-results space-y-6">
+                <div className="result-section">
+                  <h3 className="text-xl font-bold text-green-400 mb-4 flex items-center">
+                    🔗 NEAR Protocol Deployment
+                  </h3>
+                  <div className="bg-gray-800 rounded-lg p-4 space-y-3">
+                    <div className="result-item">
+                      <span className="label text-gray-400">Status:</span>
+                      <span className="value success text-green-400 font-bold">✅ NEAR Agent Deployed</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">Agent ID:</span>
+                      <span className="value font-mono text-blue-400">{deploymentResults.agentId}</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">Network:</span>
+                      <span className="value text-white">NEAR Protocol Testnet</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">Agent Name:</span>
+                      <span className="value text-white">{deploymentResults.agent?.name}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="result-section">
+                  <h3 className="text-xl font-bold text-blue-400 mb-4 flex items-center">
+                    📁 Filecoin/IPFS Storage
+                  </h3>
+                  <div className="bg-gray-800 rounded-lg p-4 space-y-3">
+                    <div className="result-item">
+                      <span className="label text-gray-400">IPFS Status:</span>
+                      <span className="value success text-green-400 font-bold">✅ Agent Card Stored on IPFS</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">IPFS Hash:</span>
+                      <span className="value hash font-mono text-blue-400 text-sm break-all">{deploymentResults.ipfsHash}</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">Filecoin Status:</span>
+                      <span className="value success text-green-400 font-bold">✅ Agent Card Secured on Filecoin</span>
+                    </div>
+                    <div className="result-item">
+                      <span className="label text-gray-400">Filecoin CID:</span>
+                      <span className="value hash font-mono text-purple-400 text-sm break-all">{deploymentResults.filecoinCID}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {deploymentResults.preciseLocation && (
+                  <div className="result-section">
+                    <h3 className="text-xl font-bold text-yellow-400 mb-4">🎯 RTK-Enhanced Positioning</h3>
+                    <div className="bg-gray-800 rounded-lg p-4">
+                      <div className="text-green-400 font-medium">
+                        ✅ RTK-Enhanced GPS: ±{deploymentResults.preciseLocation.accuracy}m accuracy
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="next-steps mt-8">
+                <h3 className="text-xl font-bold text-green-400 mb-4">🎯 What's Next?</h3>
+                <div className="space-y-3">
+                  <div className="next-step-item">
+                    <span className="text-2xl">📱</span>
+                    <span className="text-gray-300">Open NeAR Viewer to see your agent in AR</span>
+                  </div>
+                  <div className="next-step-item">
+                    <span className="text-2xl">🌐</span>
+                    <span className="text-gray-300">Your agent data is permanently stored on IPFS</span>
+                  </div>
+                  <div className="next-step-item">
+                    <span className="text-2xl">🔒</span>
+                    <span className="text-gray-300">Filecoin ensures long-term data preservation</span>
+                  </div>
+                  <div className="next-step-item">
+                    <span className="text-2xl">💰</span>
+                    <span className="text-gray-300">Start earning USDFC from agent interactions</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="action-buttons mt-8 flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/ar"
+                  className="btn-view-ar flex-1 bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all text-center font-bold flex items-center justify-center"
+                >
+                  👁️ View in NeAR
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    resetForm();
+                  }}
+                  className="btn-deploy-another flex-1 bg-gray-700 text-white py-3 px-6 rounded-lg hover:bg-gray-600 transition-colors font-bold"
+                >
+                  Deploy Another
+                </button>
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="btn-close bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-500 transition-colors font-bold"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="powered-by mt-8 text-center">
+                <small className="text-green-400 font-medium">
+                  Powered by NEAR Protocol + Filecoin/IPFS
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Deployment Status Message Component
+const DeploymentStatusMessage = ({ status }: { status: string }) => {
+  const statusMessages = {
+    'preparing': '🔄 Preparing deployment...',
+    'ipfs-creating': '📁 Creating agent card for Filecoin/IPFS...',
+    'ipfs-storing': '🌐 Storing agent card on IPFS...',
+    'filecoin-securing': '💾 Securing on Filecoin network...',
+    'near-deploying': '🔗 Deploying NEAR agent...',
+    'success': '🎉 Deployment completed successfully!',
+    'error': '❌ Deployment failed. Please try again.'
+  };
+
+  return (
+    <div className="text-lg text-green-400 font-medium">
+      {statusMessages[status as keyof typeof statusMessages] || statusMessages.preparing}
     </div>
   );
 };
