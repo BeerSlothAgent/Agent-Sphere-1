@@ -410,14 +410,14 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       {/* UI Overlay */}
       <div className="absolute top-4 left-4 z-10 bg-black bg-opacity-70 backdrop-blur-sm rounded-xl p-4 text-white max-w-sm">
         <div className="flex items-center mb-3">
-          <Eye className="h-5 w-5 mr-2 text-indigo-400" />
-          <h2 className="text-lg font-bold">AR Viewer</h2>
+          <Eye className="h-5 w-5 mr-2 text-green-400" />
+          <h2 className="text-lg font-bold">NeAR Viewer</h2>
         </div>
         
         <div className="space-y-2 text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-gray-300">Active GeoAgents:</span>
-            <span className="font-bold text-indigo-400">{objects.length}</span>
+            <span className="text-gray-300">Active NEAR Agents:</span>
+            <span className="font-bold text-green-400">{objects.length}</span>
           </div>
           
           {userLocation && (
@@ -431,7 +431,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
           
           <div className="flex items-center justify-between">
             <span className="text-gray-300">Range:</span>
-            <span className="font-bold text-purple-400">{objects[0]?.range_meters?.toFixed(1) || '25.0'}m</span>
+            <span className="font-bold text-green-400">{objects[0]?.range_meters?.toFixed(1) || '25.0'}m</span>
           </div>
           
           <div className="flex items-center justify-between">
@@ -439,13 +439,13 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
             <div className="flex space-x-1">
               {objects.some(obj => obj.chat_enabled) && <span className="text-blue-400">💬</span>}
               {objects.some(obj => obj.voice_enabled) && <span className="text-green-400">🎤</span>}
-              {objects.some(obj => obj.mcp_integrations) && <span className="text-purple-400">🔗</span>}
+              {objects.some(obj => obj.mcp_integrations) && <span className="text-green-400">🔗</span>}
             </div>
           </div>
           
           <div className="pt-2 border-t border-gray-600">
             <p className="text-xs text-gray-400">
-              Use mouse to look around, WASD keys to move. Objects are spinning and labeled with their names.
+              Use mouse to look around, WASD keys to move. NEAR agents are spinning and labeled with their names.
             </p>
           </div>
         </div>
@@ -454,14 +454,14 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       {/* Object List */}
       <div className="absolute top-4 right-4 z-10 bg-black bg-opacity-70 backdrop-blur-sm rounded-xl p-4 text-white max-w-xs max-h-96 overflow-y-auto">
         <h3 className="text-lg font-bold mb-3 flex items-center">
-          <MapPin className="h-5 w-5 mr-2 text-purple-400" />
-          Nearby GeoAgents
+          <MapPin className="h-5 w-5 mr-2 text-green-400" />
+          Nearby NEAR Agents
         </h3>
         
         {objects.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-gray-400 text-sm">No active GeoAgents found</p>
-            <p className="text-gray-500 text-xs mt-1">Deploy some objects first!</p>
+            <p className="text-gray-400 text-sm">No active NEAR Agents found</p>
+            <p className="text-gray-500 text-xs mt-1">Deploy some NEAR agents first!</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -503,7 +503,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
                       <span>Capabilities:</span>
                       {obj.chat_enabled && <span className="text-blue-400">💬</span>}
                       {obj.voice_enabled && <span className="text-green-400">🎤</span>}
-                      {obj.mcp_integrations && <span className="text-purple-400">🔗</span>}
+                      {obj.mcp_integrations && <span className="text-green-400">🔗</span>}
                     </div>
                   </div>
                 </div>
@@ -517,7 +517,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       <div className="absolute bottom-4 left-4 z-10 flex space-x-2">
         <button
           onClick={loadObjects}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full transition-colors"
+          className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full transition-colors"
           title="Refresh Objects"
         >
           <RotateCcw className="h-5 w-5" />
@@ -525,7 +525,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
         
         <button
           onClick={getCurrentLocation}
-          className="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full transition-colors"
+          className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full transition-colors"
           title="Update Location"
         >
           <Crosshair className="h-5 w-5" />
@@ -660,7 +660,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
               
               <button
                 onClick={() => setSelectedObject(null)}
-                className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
               >
                 Close
               </button>
@@ -683,14 +683,15 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
       {/* Instructions */}
       <div className="absolute bottom-4 right-4 z-10 bg-black bg-opacity-70 backdrop-blur-sm rounded-xl p-4 text-white max-w-xs">
         <div className="flex items-center mb-2">
-          <Info className="h-4 w-4 mr-2 text-blue-400" />
+          <Info className="h-4 w-4 mr-2 text-green-400" />
           <span className="font-medium text-sm">Controls</span>
         </div>
         <div className="text-xs text-gray-300 space-y-1">
           <div>• Mouse: Look around</div>
           <div>• WASD: Move around</div>
-          <div>• Click objects: View details</div>
-          <div>• Objects spin automatically</div>
+          <div>• Click NEAR agents: View details</div>
+          <div>• NEAR agents spin automatically</div>
+          <div>• NeAR QR Pay: Instant payments</div>
         </div>
       </div>
     </div>
