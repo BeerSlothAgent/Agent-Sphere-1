@@ -28,7 +28,7 @@ AgentSphere is a comprehensive NEAR Protocol-powered platform consisting of thre
 - WebXR and A-Frame implementation
 
 ## 🚀 **Live Demo**
-- **Main Site:** [AgentSphere Landing](https://your-main-site.netlify.app)
+- **Main Site:** [AgentSphere Landing](https://playful-cranachan-e941e5.netlify.app/)
 - **AR Viewer:** [Live AR Experience](https://admirable-hamster-b9c370.netlify.app/)
 
 ## 🎯 **NEAR Hackathon 2025 Integration**
@@ -205,7 +205,10 @@ MIT License - See individual repositories for specific license terms.
 - **Main Repository:** [Agent-Sphere-1](https://github.com/BeerSlothAgent/Agent-Sphere-1)
 - **NEAR+Filecoin+USDC:** [geospatila-agent-near-shade-integrations](https://github.com/BeerSlothAgent/geospatila-agent-near-shade-integrations)
 - **AR Viewer:** [geospatial-agent-ar-viewer](https://github.com/BeerSlothAgent/geospatial-agent-ar-viewer)
+- **Presentation** https://agentsphere-0xa1tku.gamma.site/
+- **Main AgentSPher** https://playful-cranachan-e941e5.netlify.app/
 - **Live AR Demo:** [https://admirable-hamster-b9c370.netlify.app/](https://admirable-hamster-b9c370.netlify.app/)
+-    
 
 ---
 
