@@ -130,32 +130,28 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       arObject: 'cone',
       arColor: '#EAB308',
       arIcon: <Triangle className="h-6 w-6" />
-      label: 'NEAR Content Creator',
-      description: 'NEAR-powered creative agent for content generation and media creation',
+    },
+    { 
       value: 'Tutor/Teacher', 
       label: 'Tutor/Teacher', 
       description: 'Professional educational instructor (appears as indigo pyramid in AR)',
       icon: <GraduationCap className="h-4 w-4" />,
-      label: 'NEAR Local Services',
-      description: 'NEAR-powered local business and service information provider',
       arIcon: <Triangle className="h-6 w-6" />
     },
     { 
       value: '3D World Modelling', 
-      label: 'NEAR Tutor/Teacher',
-      description: 'NEAR-powered professional educational instructor agent',
+      label: '3D World Modelling',
+      description: 'Spatial modeling and 3D environment creation (appears as green dodecahedron in AR)',
       icon: <Cube className="h-4 w-4" />,
       arObject: 'dodecahedron',
       arColor: '#059669',
       arIcon: <Octagon className="h-6 w-6" />
-      label: 'NEAR 3D World Modelling',
-      description: 'NEAR-powered spatial modeling and 3D environment creation agent',
+    },
+    { 
       value: 'Game Agent', 
       label: 'Game Agent', 
       description: 'Interactive gaming companion (appears as red icosahedron in AR)',
       icon: <Gamepad2 className="h-4 w-4" />,
-      label: 'NEAR Game Agent',
-      description: 'NEAR-powered interactive gaming and entertainment companion',
       arIcon: <Octagon className="h-6 w-6" />
     }
   ];

@@ -206,15 +206,6 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                     </div>
                     <h3 className="mt-4 text-xl font-medium text-white">You're on the list!</h3>
                     <p className="mt-2 text-white text-opacity-80">
-                      We'll notify you when NEAR AgentSphere is ready for your school.
-                    </p>
-                    <p className="mt-4 text-white text-opacity-90 font-medium">
-                      500 USDFC have been reserved for your NEAR account!
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
             
             <div className="mt-8 bg-white rounded-xl shadow-md p-6">
               <h3 className="text-lg font-medium text-gray-900">Connect Your Wallet</h3>
@@ -234,7 +225,8 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                 </p>
               </div>
             </div>
-            </div>
+          </div>
+          </motion.div>
           </motion.div>
         </div>
       </div>
