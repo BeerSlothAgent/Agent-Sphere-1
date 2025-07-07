@@ -30,6 +30,9 @@ interface DeployedObject {
   correctionapplied?: boolean;
   is_active: boolean;
   created_at: string;
+  interaction_types?: string[];
+  agent_wallet_type?: string;
+  agent_wallet_address?: string;
 }
 
 interface ARViewerProps {
@@ -42,8 +45,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [error, setError] = useState<string>('');
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [selectedObject, setSelectedObject] = useState<DeployedObject | null>(null);
-  const [showInteractionPanel, setShowInteractionPanel] = useState<boolean>(false);
-  const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'agent', message: string}>>([]);
   const [currentMessage, setCurrentMessage] = useState<string>('');
   const [showInteractionModal, setShowInteractionModal] = useState<boolean>(false);
   const sceneRef = useRef<any>(null);
