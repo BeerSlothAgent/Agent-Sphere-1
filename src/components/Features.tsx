@@ -90,6 +90,57 @@ const Features = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
+          <h3 className="text-2xl font-bold text-center mb-6">Three-Repository Architecture</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-2xl">🏠</span>
+              </div>
+              <h4 className="font-bold text-lg mb-2">Main Repository</h4>
+              <p className="text-gray-600 text-sm mb-4">AgentSphere landing page and core UI components</p>
+              <a 
+                href="https://github.com/BeerSlothAgent/Agent-Sphere-1" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm"
+              >
+                View Repository →
+              </a>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-2xl">🔗</span>
+              </div>
+              <h4 className="font-bold text-lg mb-2">NEAR + Filecoin + USDC</h4>
+              <p className="text-gray-600 text-sm mb-4">Blockchain integrations and smart contracts</p>
+              <a 
+                href="https://github.com/BeerSlothAgent/geospatila-agent-near-shade-integrations" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                View Repository →
+              </a>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-2xl">👁️</span>
+              </div>
+              <h4 className="font-bold text-lg mb-2">AR Viewer</h4>
+              <p className="text-gray-600 text-sm mb-4">Augmented reality viewer and camera integration</p>
+              <a 
+                href="https://github.com/BeerSlothAgent/geospatial-agent-ar-viewer" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
+              >
+                View Repository →
+              </a>
+            </div>
+          </div>
+          
           <h3 className="text-2xl font-bold text-center mb-6">Popular NEAR Agent Types</h3>
           <div className="flex flex-wrap justify-center gap-4">
             {agentTypes.map((agent, index) => (

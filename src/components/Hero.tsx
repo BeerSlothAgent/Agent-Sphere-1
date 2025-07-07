@@ -108,12 +108,13 @@ const Hero = () => {
   const phones = [
     {
       id: 'deploy',
-      title: '🚀 Deploy NEAR Agent',
-      subtitle: 'Create & Place',
-      description: 'Design your NEAR agent and deploy it at precise locations',
-      buttonText: 'Deploy NEAR Agent',
+      title: '🚀 NEAR + Filecoin + USDC',
+      subtitle: 'Full Integration',
+      description: 'Deploy NEAR agents with Filecoin storage and USDC payments',
+      buttonText: 'View Integration Code',
       buttonIcon: <Plus className="h-4 w-4" />,
-      link: '/deploy',
+      link: 'https://github.com/BeerSlothAgent/geospatila-agent-near-shade-integrations',
+      external: true,
       bgImage: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
       overlayContent: (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
@@ -121,20 +122,26 @@ const Hero = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Plus className="text-white text-2xl" />
             </div>
-            <div className="font-bold text-sm">NEAR Agent Configuration</div>
-            <div className="text-xs opacity-80">Choose type, name & location</div>
+            <div className="font-bold text-sm">NEAR + Filecoin + USDC</div>
+            <div className="text-xs opacity-80">Complete blockchain integration</div>
+            <div className="mt-2 flex items-center justify-center space-x-1 text-xs">
+              <span className="bg-green-500/20 px-2 py-1 rounded">NEAR</span>
+              <span className="bg-blue-500/20 px-2 py-1 rounded">Filecoin</span>
+              <span className="bg-purple-500/20 px-2 py-1 rounded">USDC</span>
+            </div>
           </div>
         </div>
       )
     },
     {
       id: 'preview',
-      title: '🔍 Preview NEAR Agents',
-      subtitle: 'Test & Debug',
-      description: 'Test your deployed NEAR agents in our AR preview environment',
-      buttonText: 'NeAR Preview',
+      title: '🔍 AR Viewer Repository',
+      subtitle: 'Open Source AR',
+      description: 'Explore the AR viewer codebase and contribute to development',
+      buttonText: 'View AR Code',
       buttonIcon: <Eye className="h-4 w-4" />,
-      link: '/ar',
+      link: 'https://github.com/BeerSlothAgent/geospatial-agent-ar-viewer',
+      external: true,
       bgImage: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
       overlayContent: (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
@@ -143,8 +150,13 @@ const Hero = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Eye className="text-white text-2xl" />
             </div>
-            <div className="font-bold text-sm">NeAR Testing Mode</div>
-            <div className="text-xs opacity-80">View & interact with NEAR agents</div>
+            <div className="font-bold text-sm">AR Viewer Codebase</div>
+            <div className="text-xs opacity-80">Open source AR development</div>
+            <div className="mt-2 flex items-center justify-center space-x-1 text-xs">
+              <span className="bg-green-500/20 px-2 py-1 rounded">React</span>
+              <span className="bg-blue-500/20 px-2 py-1 rounded">A-Frame</span>
+              <span className="bg-purple-500/20 px-2 py-1 rounded">WebXR</span>
+            </div>
           </div>
           
           {/* Interactive Agent Dots for AR Preview */}
@@ -172,9 +184,9 @@ const Hero = () => {
               );
             })}
           </div>
-          <div className="absolute top-4 right-4 bg-green-500/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs flex items-center">
-            <div className="w-2 h-2 rounded-full bg-green-300 mr-1"></div>
-            Testing Mode
+          <div className="absolute top-4 right-4 bg-blue-500/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs flex items-center">
+            <div className="w-2 h-2 rounded-full bg-blue-300 mr-1"></div>
+            Open Source
           </div>
         </div>
       )
@@ -186,7 +198,7 @@ const Hero = () => {
       description: 'Experience full NeAR with camera and real-world NEAR agents',
       buttonText: 'Go Live',
       buttonIcon: <Camera className="h-4 w-4" />,
-      link: '#',
+      link: 'https://admirable-hamster-b9c370.netlify.app/',
       external: true,
       bgImage: 'https://images.pexels.com/photos/3761348/pexels-photo-3761348.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
       overlayContent: (
@@ -197,6 +209,11 @@ const Hero = () => {
             </div>
             <div className="font-bold text-sm">Live NeAR Camera</div>
             <div className="text-xs opacity-80">Full production experience</div>
+            <div className="mt-2 flex items-center justify-center space-x-1 text-xs">
+              <span className="bg-green-500/20 px-2 py-1 rounded">Live AR</span>
+              <span className="bg-red-500/20 px-2 py-1 rounded">Camera</span>
+              <span className="bg-yellow-500/20 px-2 py-1 rounded">GPS</span>
+            </div>
           </div>
           <div className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs flex items-center">
             <div className="w-2 h-2 rounded-full bg-red-300 mr-1 animate-pulse"></div>
@@ -292,11 +309,57 @@ const Hero = () => {
                   
                   {/* Action button */}
                   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-                    {phone.external ? (
+                    {phone.id === 'experience' ? (
                       <button
                         onClick={() => {
                           // Open the live AR viewer in a new tab
                           window.open('https://admirable-hamster-b9c370.netlify.app/', '_blank');
+                        }}
+                        className="group relative"
+                      >
+                        <motion.div 
+                          className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center space-x-2 group-hover:shadow-xl transition-all duration-300"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          {phone.buttonIcon}
+                          <span>{phone.buttonText}</span>
+                        </motion.div>
+                      </button>
+                    ) : phone.id === 'deploy' ? (
+                      <button
+                        onClick={() => {
+                          // Open the NEAR/Filecoin/USDC integrations repo
+                          window.open('https://github.com/BeerSlothAgent/geospatila-agent-near-shade-integrations', '_blank');
+                        }}
+                        className="group relative"
+                      >
+                        <motion.div 
+                          className="deploy-button-enhanced bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex flex-col items-center space-y-1 group-hover:shadow-xl transition-all duration-300"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <div className="button-content">
+                            <div className="main-action flex items-center space-x-2">
+                              {phone.buttonIcon}
+                              <span>Deploy NEAR Agent</span>
+                            </div>
+                            <div className="storage-action">& Store on Filecoin/IPFS</div>
+                          </div>
+                          <div className="dual-logos">
+                            <span className="near-logo">🔗 NEAR</span>
+                            <span className="plus">+</span>
+                            <span className="filecoin-logo">📁 Filecoin</span>
+                            <span className="plus">+</span>
+                            <span className="usdc-logo">💰 USDC</span>
+                          </div>
+                        </motion.div>
+                      </button>
+                    ) : phone.id === 'preview' ? (
+                      <button
+                        onClick={() => {
+                          // Open the AR Viewer repo
+                          window.open('https://github.com/BeerSlothAgent/geospatial-agent-ar-viewer', '_blank');
                         }}
                         className="group relative"
                       >

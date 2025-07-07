@@ -59,6 +59,42 @@ const Footer = () => {
                 <li><a href="#" className="text-indigo-200 hover:text-white transition-colors">Privacy</a></li>
               </ul>
             </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold text-white">Repositories</h3>
+              <ul className="mt-4 space-y-2">
+                <li>
+                  <a 
+                    href="https://github.com/BeerSlothAgent/Agent-Sphere-1" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-indigo-200 hover:text-white transition-colors"
+                  >
+                    Main Repository
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://github.com/BeerSlothAgent/geospatila-agent-near-shade-integrations" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-indigo-200 hover:text-white transition-colors"
+                  >
+                    NEAR + Filecoin + USDC
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://github.com/BeerSlothAgent/geospatial-agent-ar-viewer" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-indigo-200 hover:text-white transition-colors"
+                  >
+                    AR Viewer
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         
