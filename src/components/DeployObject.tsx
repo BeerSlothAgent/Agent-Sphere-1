@@ -448,7 +448,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       console.log('🚀 Starting agent deployment...');
 
       // Use precise location if available, otherwise fall back to standard location
-      const displayLocation = preciseLocation || location;
       const deploymentLatitude = preciseLocation?.preciseLatitude || location.latitude;
       const deploymentLongitude = preciseLocation?.preciseLongitude || location.longitude;
       const deploymentAltitude = preciseLocation?.preciseAltitude || location.altitude;
@@ -1010,7 +1009,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   )}
                   {agentTypeDescriptionsWithNotifications[selectedAgentType] && (
                     <p className="text-xs text-blue-600 mt-2 italic">
-                      📱 {agentTypeDescriptionsWithNotifications[selectedAgentType].notification}
+                      📱 {agentTypeDescriptionsWithNotifications[selectedAgentType as keyof typeof agentTypeDescriptionsWithNotifications].notification}
                     </p>
                   )}
                   
