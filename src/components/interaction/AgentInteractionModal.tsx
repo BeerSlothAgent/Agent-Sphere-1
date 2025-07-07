@@ -62,7 +62,7 @@ interface AgentInteractionModalProps {
   agent: DeployedObject | null;
   visible: boolean;
   onClose: () => void;
-  userLocation?: { latitude: number; longitude: number };
+  userLocation?: { latitude: number; longitude: number } | null;
 }
 
 const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({

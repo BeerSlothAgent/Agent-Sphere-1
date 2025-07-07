@@ -43,7 +43,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [objects, setObjects] = useState<DeployedObject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
-  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [selectedObject, setSelectedObject] = useState<DeployedObject | null>(null);
   const [showInteractionModal, setShowInteractionModal] = useState<boolean>(false);
   const sceneRef = useRef<any>(null);
@@ -56,20 +56,20 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       console.log('Geolocation not supported, using demo location');
-      setUserLocation({ lat: 34.0522, lon: -118.2437 }); // LA coordinates for demo
+      setUserLocation({ latitude: 34.0522, longitude: -118.2437 }); // LA coordinates for demo
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setUserLocation({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
         });
       },
       (error) => {
         console.log('Location error, using demo location:', error);
-        setUserLocation({ lat: 34.0522, lon: -118.2437 }); // Fallback to demo location
+        setUserLocation({ latitude: 34.0522, longitude: -118.2437 }); // Fallback to demo location
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
@@ -103,10 +103,10 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
         console.log('🎯 AR Viewer ready with', data.length, 'active GeoAgents');
         data.forEach((obj: DeployedObject) => {
           const coords = obj.preciselatitude && obj.preciselongitude 
-            ? { lat: obj.preciselatitude, lon: obj.preciselongitude }
-            : { lat: obj.latitude, lon: obj.longitude };
+            ? { latitude: obj.preciselatitude, longitude: obj.preciselongitude }
+            : { latitude: obj.latitude, longitude: obj.longitude };
           
-          console.log(`📍 ${obj.name}: ${coords.lat.toFixed(6)}, ${coords.lon.toFixed(6)} ${obj.correctionapplied ? '(RTK)' : '(GPS)'}`);
+          console.log(`📍 ${obj.name}: ${coords.latitude.toFixed(6)}, ${coords.longitude.toFixed(6)} ${obj.correctionapplied ? '(RTK)' : '(GPS)'}`);
         });
       }
     } catch (err) {
@@ -153,21 +153,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
     setShowInteractionModal(true);
   };
 
-  const getAgentGreeting = (agentType: string) => {
-    switch (agentType) {
-      case 'ai_agent':
-        return "Hello! I'm your AI assistant. How can I help you today?";
-      case 'tutor':
-        return "Welcome! I'm here to help you learn. What subject would you like to explore?";
-      case 'landmark':
-        return "Hi there! I can provide information about this location and nearby services.";
-      case 'building':
-        return "Greetings! I specialize in spatial analysis and 3D modeling. What can I help you visualize?";
-      default:
-        return "Hello! I'm an AI agent ready to assist you.";
-    }
-  };
-
   const getRelativePosition = (objLat: number, objLon: number, index: number) => {
     if (!userLocation) {
       // Demo mode: arrange objects in a circle around the viewer
@@ -181,11 +166,11 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
     }
 
     // Real mode: calculate actual relative position
-    const distance = calculateDistance(userLocation.lat, userLocation.lon, objLat, objLon);
+    const distance = calculateDistance(userLocation.latitude, userLocation.longitude, objLat, objLon);
     const bearing = Math.atan2(
-      Math.sin((objLon - userLocation.lon) * Math.PI / 180),
-      Math.cos(userLocation.lat * Math.PI / 180) * Math.tan(objLat * Math.PI / 180) -
-      Math.sin(userLocation.lat * Math.PI / 180) * Math.cos((objLon - userLocation.lon) * Math.PI / 180)
+      Math.sin((objLon - userLocation.longitude) * Math.PI / 180),
+      Math.cos(userLocation.latitude * Math.PI / 180) * Math.tan(objLat * Math.PI / 180) -
+      Math.sin(userLocation.latitude * Math.PI / 180) * Math.cos((objLon - userLocation.longitude) * Math.PI / 180)
     );
 
     // Scale down distance for AR view (1 meter = 1 unit, but cap at reasonable distance)
@@ -362,7 +347,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
             <div className="flex items-center justify-between">
               <span className="text-gray-300">Your Location:</span>
               <span className="font-mono text-xs text-green-400">
-                {userLocation.lat.toFixed(4)}, {userLocation.lon.toFixed(4)}
+                {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
               </span>
             </div>
           )}
@@ -406,8 +391,8 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
             {objects.map((obj) => {
               const distance = userLocation 
                 ? calculateDistance(
-                    userLocation.lat, 
-                    userLocation.lon,
+                    userLocation.latitude, 
+                    userLocation.longitude,
                     obj.preciselatitude || obj.latitude,
                     obj.preciselongitude || obj.longitude
                   )
