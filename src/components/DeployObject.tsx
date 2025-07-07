@@ -1,7 +1,7 @@
 import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Globe, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Globe, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
+import { useState } from 'react';
 
 interface Location {
   latitude: number;
@@ -72,7 +72,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     },
     { 
       value: 'study_buddy', 
-      label: 'NEAR Study Buddy',
+      label: 'Study Buddy', 
       description: 'Educational companion (appears as green sphere in AR)',
       icon: <GraduationCap className="h-4 w-4" />,
       arObject: 'sphere',
@@ -81,7 +81,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
     },
     { 
       value: 'tutor', 
-      label: 'NEAR Tutor', 
+      label: 'Tutor', 
       description: 'Specialized teaching agent (appears as purple pyramid in AR)',
       icon: <User className="h-4 w-4" />,
       arObject: 'pyramid',
