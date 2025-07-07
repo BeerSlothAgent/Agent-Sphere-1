@@ -53,9 +53,9 @@ const MapVisualization = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Agents Around the Globe</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">NEAR Agents Around the Globe</h2>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-            Join thousands of students deploying AI agents at schools and communities worldwide
+            Join thousands of students deploying NEAR agents at schools and communities worldwide with NeAR QR Pay
           </p>
         </motion.div>
 
@@ -79,8 +79,8 @@ const MapVisualization = () => {
             {/* Legend */}
             <div className="absolute bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm rounded-lg p-3 shadow-md">
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-                <span className="text-sm font-medium text-gray-700">Active Agents</span>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span className="text-sm font-medium text-gray-700">Active NEAR Agents</span>
               </div>
             </div>
             
@@ -89,11 +89,15 @@ const MapVisualization = () => {
               <div className="text-sm font-medium text-gray-700">
                 <div className="flex items-center space-x-2 mb-1">
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  <span>5,723 Active Agents</span>
+                  <span>5,723 Active NEAR Agents</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
                   <span>312 Schools Connected</span>
+                </div>
+                <div className="flex items-center space-x-2 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <span>NeAR QR Pay Active</span>
                 </div>
               </div>
             </div>
@@ -108,16 +112,16 @@ const MapVisualization = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <div className="bg-white rounded-xl shadow-md p-6 text-center">
-            <div className="text-3xl font-bold text-indigo-600 mb-2">5,723</div>
-            <div className="text-gray-600">Active Agents</div>
+            <div className="text-3xl font-bold text-green-600 mb-2">5,723</div>
+            <div className="text-gray-600">Active NEAR Agents</div>
           </div>
           <div className="bg-white rounded-xl shadow-md p-6 text-center">
-            <div className="text-3xl font-bold text-purple-600 mb-2">312</div>
+            <div className="text-3xl font-bold text-green-600 mb-2">312</div>
             <div className="text-gray-600">Schools Connected</div>
           </div>
           <div className="bg-white rounded-xl shadow-md p-6 text-center">
-            <div className="text-3xl font-bold text-pink-500 mb-2">1.2M</div>
-            <div className="text-gray-600">Auras Earned</div>
+            <div className="text-3xl font-bold text-green-600 mb-2">1.2M</div>
+            <div className="text-gray-600">USDFC Earned</div>
           </div>
         </motion.div>
       </div>

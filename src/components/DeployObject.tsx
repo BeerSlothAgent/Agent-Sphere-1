@@ -61,8 +61,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   const agentTypes = [
     { 
       value: 'ai_agent', 
-      label: 'AI Agent', 
-      description: 'General purpose AI assistant (appears as blue cube in AR)',
+      label: 'NEAR AI Agent',
+      description: 'NEAR-powered AI assistant for various tasks and queries',
       icon: <Brain className="h-4 w-4" />,
       arObject: 'cube',
       arColor: '#3B82F6',
@@ -100,62 +100,62 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       label: 'Building', 
       description: 'Architectural information agent (appears as gray cube in AR)',
       icon: <Building className="h-4 w-4" />,
-      arObject: 'cube',
-      arColor: '#6B7280',
+      label: 'NEAR Study Buddy',
+      description: 'NEAR-powered educational companion for learning assistance',
       arIcon: <Box className="h-6 w-6" />
     },
     { 
       value: 'Intelligent Assistant', 
-      label: 'Intelligent Assistant', 
-      description: 'Advanced AI assistant (appears as cyan octahedron in AR)',
+      label: 'NEAR Tutor',
+      description: 'NEAR-powered specialized teaching agent for specific subjects',
       icon: <Brain className="h-4 w-4" />,
       arObject: 'octahedron',
       arColor: '#06B6D4',
       arIcon: <Octagon className="h-6 w-6" />
-    },
-    { 
+      label: 'NEAR Landmark',
+      description: 'NEAR-powered location-based information and context provider',
       value: 'Content Creator', 
       label: 'Content Creator', 
       description: 'Creative agent for content generation (appears as pink torus in AR)',
       icon: <Palette className="h-4 w-4" />,
-      arObject: 'torus',
-      arColor: '#EC4899',
+      label: 'NEAR Building',
+      description: 'NEAR-powered architectural and building-specific information agent',
       arIcon: <Circle className="h-6 w-6" />
     },
     { 
       value: 'Local Services', 
-      label: 'Local Services', 
-      description: 'Local business information provider (appears as yellow cone in AR)',
+      label: 'NEAR Intelligent Assistant',
+      description: 'Advanced NEAR-powered AI assistant with enhanced capabilities',
       icon: <Store className="h-4 w-4" />,
       arObject: 'cone',
       arColor: '#EAB308',
       arIcon: <Triangle className="h-6 w-6" />
-    },
-    { 
+      label: 'NEAR Content Creator',
+      description: 'NEAR-powered creative agent for content generation and media creation',
       value: 'Tutor/Teacher', 
       label: 'Tutor/Teacher', 
       description: 'Professional educational instructor (appears as indigo pyramid in AR)',
       icon: <GraduationCap className="h-4 w-4" />,
-      arObject: 'pyramid',
-      arColor: '#4F46E5',
+      label: 'NEAR Local Services',
+      description: 'NEAR-powered local business and service information provider',
       arIcon: <Triangle className="h-6 w-6" />
     },
     { 
       value: '3D World Modelling', 
-      label: '3D World Modelling', 
-      description: 'Spatial modeling agent (appears as emerald dodecahedron in AR)',
+      label: 'NEAR Tutor/Teacher',
+      description: 'NEAR-powered professional educational instructor agent',
       icon: <Cube className="h-4 w-4" />,
       arObject: 'dodecahedron',
       arColor: '#059669',
       arIcon: <Octagon className="h-6 w-6" />
-    },
-    { 
+      label: 'NEAR 3D World Modelling',
+      description: 'NEAR-powered spatial modeling and 3D environment creation agent',
       value: 'Game Agent', 
       label: 'Game Agent', 
       description: 'Interactive gaming companion (appears as red icosahedron in AR)',
       icon: <Gamepad2 className="h-4 w-4" />,
-      arObject: 'icosahedron',
-      arColor: '#DC2626',
+      label: 'NEAR Game Agent',
+      description: 'NEAR-powered interactive gaming and entertainment companion',
       arIcon: <Octagon className="h-6 w-6" />
     }
   ];
@@ -771,9 +771,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
           className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
-            <h1 className="text-3xl font-bold text-white">Deploy GeoAgent</h1>
-            <p className="text-indigo-100 mt-2">Create and deploy your AI agent to the NEAR blockchain</p>
+            <h1 className="text-3xl font-bold text-white">Deploy NEAR Agent</h1>
+            <p className="text-green-100 mt-2">Create and deploy your NEAR agent to the NEAR blockchain with NeAR QR Pay</p>
           </div>
 
           <div className="p-8 space-y-8">
@@ -955,13 +954,13 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  NEAR Agent Description
                 </label>
                 <textarea
                   value={agentDescription}
                   onChange={(e) => setAgentDescription(e.target.value)}
-                  placeholder="Describe what your agent does and how it can help users..."
-                  rows={3}
+                  placeholder="Describe what your NEAR agent does and how it can help users with NEAR Protocol integration..."
+                  placeholder="My NEAR Study Buddy"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -1044,7 +1043,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               {/* Capabilities */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Core Interaction Methods
+                  NEAR Agent Interaction Methods
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
@@ -1057,7 +1056,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     />
                     <label htmlFor="chat-enabled" className="flex items-center text-sm font-medium text-gray-700">
                       <MessageSquare className="h-4 w-4 mr-2 text-blue-600" />
-                      Text Chat
+                      NeAR Text Chat
                     </label>
                   </div>
 
@@ -1071,7 +1070,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     />
                     <label htmlFor="voice-enabled" className="flex items-center text-sm font-medium text-gray-700">
                       <Mic className="h-4 w-4 mr-2 text-green-600" />
-                      Voice Chat
+                      NeAR Voice Chat
                     </label>
                   </div>
 
@@ -1085,7 +1084,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                     />
                     <label htmlFor="defi-enabled" className="flex items-center text-sm font-medium text-gray-700">
                       <DollarSign className="h-4 w-4 mr-2 text-purple-600" />
-                      DeFi Features
+                      NEAR DeFi Features
                     </label>
                   </div>
                 </div>
@@ -1093,7 +1092,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
               {/* MCP Server Integrations */}
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">MCP Server Integrations</h4>
+                <h4 className="font-medium text-gray-900">NEAR MCP Server Integrations</h4>
                 <div className="grid grid-cols-2 gap-4 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-4">
                   {mcpIntegrations.map((integration) => (
                     <label key={integration.id} className="flex items-start space-x-2 text-sm">
@@ -1115,7 +1114,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               {/* Wallet Configuration */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Agent Wallet Type
+                  NEAR Agent Wallet Type
                 </label>
                 <select
                   value={selectedWalletType}
@@ -1240,7 +1239,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center space-x-2">
                 <span>💬</span>
-                <span>Interaction Types</span>
+                <span>NEAR Interaction Types</span>
               </h3>
               
               <div className="grid grid-cols-1 gap-3">
@@ -1255,8 +1254,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <div className="flex items-center space-x-2">
                     <span className="text-xl">💬</span>
                     <div>
-                      <span className="font-medium">Text Chat</span>
-                      <p className="text-sm text-gray-500">Enable text-based conversations</p>
+                      <span className="font-medium">NeAR Text Chat</span>
+                      <p className="text-sm text-gray-500">Enable NEAR-powered text-based conversations</p>
                     </div>
                   </div>
                 </label>
@@ -1272,8 +1271,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <div className="flex items-center space-x-2">
                     <span className="text-xl">🎤</span>
                     <div>
-                      <span className="font-medium">Voice Interface</span>
-                      <p className="text-sm text-gray-500">Enable voice interactions (+50 USDFC)</p>
+                      <span className="font-medium">NeAR Voice Interface</span>
+                      <p className="text-sm text-gray-500">Enable NEAR-powered voice interactions (+50 USDFC)</p>
                     </div>
                   </div>
                 </label>
@@ -1289,8 +1288,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <div className="flex items-center space-x-2">
                     <span className="text-xl">📹</span>
                     <div>
-                      <span className="font-medium">Video Interface</span>
-                      <p className="text-sm text-gray-500">Enable video conversations (+100 USDFC)</p>
+                      <span className="font-medium">NeAR Video Interface</span>
+                      <p className="text-sm text-gray-500">Enable NEAR-powered video conversations (+100 USDFC)</p>
                     </div>
                   </div>
                 </label>
@@ -1299,15 +1298,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
             {/* Economics & Ownership */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Economics & Ownership</h3>
+              <h3 className="text-lg font-semibold">NEAR Economics & Ownership</h3>
               
               {/* Agent Interaction Fee Setup */}
               <div className="bg-purple-50 p-4 rounded-lg">
-                <h4 className="font-medium text-purple-900 mb-3">Agent Interaction Fee</h4>
+                <h4 className="font-medium text-purple-900 mb-3">NEAR Agent Interaction Fee</h4>
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Fee per Interaction (USDFC)
+                      Fee per Interaction (USDFC on NEAR)
                     </label>
                     <input
                       type="number"
@@ -1319,7 +1318,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                       onChange={(e) => setInteractionFee(e.target.value)}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Set the fee users pay to interact with your agent
+                      Set the USDFC fee users pay to interact with your NEAR agent
                     </p>
                   </div>
                   
@@ -1343,14 +1342,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
               {/* Ownership Details */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-3">Ownership Details</h4>
+                <h4 className="font-medium text-gray-900 mb-3">NEAR Ownership Details</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Owner Wallet:</span>
+                    <span className="text-gray-600">NEAR Owner Wallet:</span>
                     <span className="font-mono text-xs">{ownerWallet}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Agent Wallet ({selectedWalletType}):</span>
+                    <span className="text-gray-600">NEAR Agent Wallet ({selectedWalletType}):</span>
                     <span className="font-mono text-xs text-blue-600">{generateFakeAgentWallet(selectedWalletType)}</span>
                   </div>
                 </div>
@@ -1358,12 +1357,13 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
 
               {/* Revenue Potential */}
               <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-medium text-green-900 mb-2">Revenue Potential</h4>
+                <h4 className="font-medium text-green-900 mb-2">NEAR Revenue Potential</h4>
                 <ul className="text-sm text-green-800 space-y-1">
                   <li>• Earn {interactionFee || '0.50'} USDFC per user interaction</li>
-                  <li>• Higher visibility = more potential users</li>
-                  <li>• Voice agents typically earn 2x more</li>
-                  <li>• Educational agents have high engagement</li>
+                  <li>• Higher visibility = more potential NEAR users</li>
+                  <li>• NeAR voice agents typically earn 2x more</li>
+                  <li>• NEAR educational agents have high engagement</li>
+                  <li>• NeAR QR Pay enables instant transactions</li>
                 </ul>
               </div>
             </div>
@@ -1381,15 +1381,15 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
             <button
               onClick={handleDeployAgent}
               disabled={!isReadyToDeploy}
-              className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50 transition-colors"
+              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition-colors"
             >
               {isDeploying ? (
                 <div className="flex items-center justify-center space-x-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Deploying to NEAR Blockchain...</span>
+                  <span>Deploying NEAR Agent to NEAR Blockchain...</span>
                 </div>
               ) : (
-                'Deploy Agent'
+                'Deploy NEAR Agent'
               )}
             </button>
           </div>

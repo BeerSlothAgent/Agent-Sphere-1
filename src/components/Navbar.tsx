@@ -40,11 +40,14 @@ const Navbar = () => {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center">
-                <div className="h-8 w-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold mr-2">
-                  A
+                <div className="h-8 w-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold mr-2">
+                  N
                 </div>
-                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-emerald-600">
                   AgentSphere
+                </span>
+                <span className="ml-2 text-xs text-gray-500 font-normal">
+                  powered by NEAR
                 </span>
               </Link>
             </div>
@@ -70,17 +73,17 @@ const Navbar = () => {
               
               <Link 
                 to="/deploy" 
-                className="flex items-center text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="flex items-center text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Deploy Object
+                Deploy NEAR Agent
               </Link>
               <Link 
                 to="/ar" 
-                className="flex items-center text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="flex items-center text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 <Eye className="h-4 w-4 mr-1" />
-                View AR
+                View NeAR
               </Link>
 
               {/* Supabase Connection Button */}
@@ -89,11 +92,11 @@ const Navbar = () => {
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isSupabaseConnected
                     ? 'text-green-700 bg-green-50 hover:bg-green-100'
-                    : 'text-orange-700 bg-orange-50 hover:bg-orange-100'
+                    : 'text-green-700 bg-green-50 hover:bg-green-100'
                 }`}
               >
                 <Database className="h-4 w-4 mr-1" />
-                {isSupabaseConnected ? 'Database Connected' : 'Connect to Supabase'}
+                {isSupabaseConnected ? 'NEAR Database Connected' : 'Connect NEAR Database'}
               </button>
               
               {/* Wallet Connection */}
@@ -116,12 +119,12 @@ const Navbar = () => {
                 ) : (
                   <ConnectWallet 
                     theme="light"
-                    btnTitle="Connect Wallet"
-                    modalTitle="Connect Wallet to AgentSphere"
+                    btnTitle="Connect NEAR Wallet"
+                    modalTitle="Connect NEAR Wallet to AgentSphere"
                     modalSize="compact"
                     welcomeScreen={{
-                      title: "Connect to AgentSphere",
-                      subtitle: "Connect your wallet to deploy and manage virtual objects"
+                      title: "Connect NEAR Wallet",
+                      subtitle: "Connect your NEAR wallet to deploy and manage NEAR agents"
                     }}
                     detailsBtn={() => {
                       return (
@@ -130,9 +133,9 @@ const Navbar = () => {
                         </div>
                       );
                     }}
-                    className="!bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200 !px-4 !py-2"
+                    className="!bg-gradient-to-r !from-green-500 !to-emerald-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200 !px-4 !py-2"
                     style={{
-                      background: 'linear-gradient(to right, #4f46e5, #7c3aed)',
+                      background: 'linear-gradient(to right, #10b981, #059669)',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
@@ -196,19 +199,19 @@ const Navbar = () => {
               
               <Link
                 to="/deploy"
-                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Deploy Object
+                Deploy NEAR Agent
               </Link>
               <Link
                 to="/ar"
-                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Eye className="h-4 w-4 mr-1" />
-                View AR
+                View NeAR
               </Link>
 
               {/* Mobile Supabase Connection */}
@@ -220,11 +223,11 @@ const Navbar = () => {
                 className={`flex items-center w-full px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isSupabaseConnected
                     ? 'text-green-700 bg-green-50 hover:bg-green-100'
-                    : 'text-orange-700 bg-orange-50 hover:bg-orange-100'
+                    : 'text-green-700 bg-green-50 hover:bg-green-100'
                 }`}
               >
                 <Database className="h-4 w-4 mr-1" />
-                {isSupabaseConnected ? 'Database Connected' : 'Connect to Supabase'}
+                {isSupabaseConnected ? 'NEAR Database Connected' : 'Connect NEAR Database'}
               </button>
               
               {/* Mobile Wallet Connection */}
@@ -248,12 +251,12 @@ const Navbar = () => {
                 <div className="px-3 py-2">
                   <ConnectWallet 
                     theme="light"
-                    btnTitle="Connect Wallet"
-                    modalTitle="Connect Wallet to AgentSphere"
+                    btnTitle="Connect NEAR Wallet"
+                    modalTitle="Connect NEAR Wallet to AgentSphere"
                     modalSize="compact"
                     welcomeScreen={{
-                      title: "Connect to AgentSphere",
-                      subtitle: "Connect your wallet to deploy and manage virtual objects"
+                      title: "Connect NEAR Wallet",
+                      subtitle: "Connect your NEAR wallet to deploy and manage NEAR agents"
                     }}
                     detailsBtn={() => {
                       return (
@@ -262,9 +265,9 @@ const Navbar = () => {
                         </div>
                       );
                     }}
-                    className="!w-full !bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200"
+                    className="!w-full !bg-gradient-to-r !from-green-500 !to-emerald-600 !text-white !rounded-lg !font-medium !shadow-md hover:!shadow-lg !transition-all !duration-200"
                     style={{
-                      background: 'linear-gradient(to right, #4f46e5, #7c3aed)',
+                      background: 'linear-gradient(to right, #10b981, #059669)',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
@@ -297,7 +300,7 @@ const Navbar = () => {
                   id="supabase-modal-title"
                   className="text-2xl font-bold text-gray-900"
                 >
-                  {isSupabaseConnected ? 'Supabase Connected' : 'Connect to Supabase'}
+                  {isSupabaseConnected ? 'NEAR Database Connected' : 'Connect NEAR Database'}
                 </h2>
                 <button
                   onClick={closeSupabaseModal}
@@ -313,20 +316,21 @@ const Navbar = () => {
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                     <div className="flex items-center">
                       <Database className="h-5 w-5 text-green-600 mr-2" />
-                      <span className="text-green-800 font-medium">Database Successfully Connected!</span>
+                      <span className="text-green-800 font-medium">NEAR Database Successfully Connected!</span>
                     </div>
                     <p className="text-green-700 text-sm mt-2">
-                      Your Supabase database is connected and ready to store deployed objects.
+                      Your NEAR-powered Supabase database is connected and ready to store deployed NEAR agents.
                     </p>
                   </div>
                   
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <h3 className="font-medium text-blue-800 mb-2">What you can do now:</h3>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• Deploy 3D objects to your database</li>
-                      <li>• View objects in AR from your database</li>
+                      <li>• Deploy NEAR agents to your database</li>
+                      <li>• View NEAR agents in NeAR from your database</li>
                       <li>• Use RTK-enhanced GPS for precise positioning</li>
-                      <li>• Share objects with other users</li>
+                      <li>• Share NEAR agents with other users</li>
+                      <li>• Process payments with NeAR QR Pay</li>
                     </ul>
                   </div>
                 </div>
@@ -335,10 +339,10 @@ const Navbar = () => {
                   <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
                     <div className="flex items-center">
                       <Database className="h-5 w-5 text-orange-600 mr-2" />
-                      <span className="text-orange-800 font-medium">Database Connection Required</span>
+                      <span className="text-orange-800 font-medium">NEAR Database Connection Required</span>
                     </div>
                     <p className="text-orange-700 text-sm mt-2">
-                      To deploy and view objects, you need to connect your Supabase database.
+                      To deploy and view NEAR agents, you need to connect your NEAR-powered Supabase database.
                     </p>
                   </div>
 
@@ -378,7 +382,7 @@ const Navbar = () => {
                         </div>
                         <div>
                           <p className="text-gray-700">
-                            <strong>Create a .env file:</strong> In your project root, create a <code className="bg-gray-100 px-1 rounded">.env</code> file with:
+                            <strong>Create a .env file:</strong> In your project root, create a <code className="bg-gray-100 px-1 rounded">.env</code> file with NEAR integration:
                           </p>
                           <div className="mt-2 bg-gray-900 text-green-400 p-3 rounded-lg text-sm font-mono">
                             <div>VITE_SUPABASE_URL=your_project_url_here</div>
@@ -404,8 +408,8 @@ const Navbar = () => {
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <h4 className="font-medium text-blue-800 mb-2">Database Schema</h4>
                     <p className="text-blue-700 text-sm">
-                      The database schema is already configured with the <code className="bg-blue-100 px-1 rounded">deployed_objects</code> table and proper security policies. 
-                      Once you connect, everything will work automatically!
+                      The NEAR-optimized database schema is already configured with the <code className="bg-blue-100 px-1 rounded">deployed_objects</code> table and NEAR Protocol integration. 
+                      Once you connect, NEAR agents and NeAR QR Pay will work automatically!
                     </p>
                   </div>
                 </div>
@@ -414,7 +418,7 @@ const Navbar = () => {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={closeSupabaseModal}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
                   {isSupabaseConnected ? 'Got it!' : 'I\'ll set this up'}
                 </button>

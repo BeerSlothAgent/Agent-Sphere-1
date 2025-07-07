@@ -61,33 +61,33 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Join the Waitlist</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-lg">
-              Be among the first to deploy AI agents at your school. Early access members get bonus Auras and exclusive agent templates.
+              Be among the first to deploy NEAR agents at your school. Early access members get bonus USDFC and exclusive NEAR agent templates.
             </p>
             
             <div className="mt-8">
               <div className="flex items-center">
-                <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600">
+                <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600">
                   <Mail className="h-6 w-6" />
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Email Signup</h3>
-                  <p className="mt-1 text-sm text-gray-500">Get notified when we launch</p>
+                  <p className="mt-1 text-sm text-gray-500">Get notified when NEAR AgentSphere launches</p>
                 </div>
               </div>
               
               <div className="mt-4 flex items-center">
-                <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600">
+                <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600">
                   <Lock className="h-6 w-6" />
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Secure Access</h3>
-                  <p className="mt-1 text-sm text-gray-500">Early access to beta features</p>
+                  <h3 className="text-lg font-medium text-gray-900">NEAR Protocol Security</h3>
+                  <p className="mt-1 text-sm text-gray-500">Early access to NEAR-powered features</p>
                 </div>
               </div>
             </div>
             
             <div className="mt-10">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 text-indigo-800">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800">
                 <span className="text-sm font-medium">
                   {waitlistCount.toLocaleString()} students already signed up
                 </span>
@@ -96,13 +96,13 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
             
             <div className="mt-8">
               <div className="aura-coin inline-block">
-                <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold">
-                  A
+                <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center text-white text-2xl font-bold">
+                  N
                 </div>
               </div>
-              <h3 className="mt-4 text-xl font-bold text-gray-900">Earn 500 Auras</h3>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">Earn 500 USDFC</h3>
               <p className="mt-2 text-gray-600">
-                Join now and receive 500 Auras when we launch - enough to deploy your first 5 agents!
+                Join now and receive 500 USDFC when we launch - enough to deploy your first 5 NEAR agents!
               </p>
             </div>
           </motion.div>
@@ -114,11 +114,10 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl overflow-hidden">
               <div className="px-6 py-8 sm:p-10 sm:pb-6">
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-2xl leading-8 font-extrabold text-white sm:text-3xl">
-                    Early Access
+                    NEAR Early Access
                   </h3>
                   <span className="px-3 py-1 rounded-full text-sm font-semibold bg-white bg-opacity-20 text-white">
                     Limited Spots
@@ -129,7 +128,7 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                   <span className="ml-1 text-xl font-semibold">for beta testers</span>
                 </div>
                 <p className="mt-5 text-lg text-white text-opacity-90">
-                  Get exclusive early access to AgentSphere and help shape the future of AR agents.
+                  Get exclusive early access to NEAR AgentSphere and help shape the future of NeAR agents.
                 </p>
               </div>
               
@@ -178,12 +177,12 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-lg text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       aria-describedby="submit-status"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center">
-                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -206,10 +205,10 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                     </div>
                     <h3 className="mt-4 text-xl font-medium text-white">You're on the list!</h3>
                     <p className="mt-2 text-white text-opacity-80">
-                      We'll notify you when AgentSphere is ready for your school.
+                      We'll notify you when NEAR AgentSphere is ready for your school.
                     </p>
                     <p className="mt-4 text-white text-opacity-90 font-medium">
-                      500 Auras have been reserved for your account!
+                      500 USDFC have been reserved for your NEAR account!
                     </p>
                   </div>
                 )}
@@ -219,18 +218,18 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
             <div className="mt-8 bg-white rounded-xl shadow-md p-6">
               <h3 className="text-lg font-medium text-gray-900">Connect Your Wallet</h3>
               <p className="mt-2 text-gray-600">
-                Store your Auras securely and trade with other users.
+                Store your USDFC securely and trade with other NEAR users.
               </p>
               <div className="mt-4">
                 <button 
-                  className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200"
+                  className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200"
                   aria-describedby="wallet-status"
                 >
                   <Wallet className="h-5 w-5 mr-2" />
-                  Connect Wallet (Coming Soon)
+                  Connect NEAR Wallet (Coming Soon)
                 </button>
                 <p id="wallet-status" className="mt-2 text-sm text-gray-500 text-center">
-                  Wallet integration will be available at launch
+                  NEAR wallet integration will be available at launch
                 </p>
               </div>
             </div>

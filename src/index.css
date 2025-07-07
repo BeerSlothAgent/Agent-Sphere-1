@@ -3,20 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --primary: #7C3AED;
-  --primary-light: #8B5CF6;
-  --secondary: #F472B6;
+  --primary: #10B981;
+  --primary-light: #34D399;
+  --secondary: #059669;
   --dark: #1E1B4B;
-  --light: #F5F3FF;
+  --light: #ECFDF5;
+  --near-green: #00EC97;
+  --near-dark: #000000;
+  --near-emerald: #10B981;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
-  @apply bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen;
+  @apply bg-gradient-to-b from-green-50 to-emerald-50 min-h-screen;
 }
 
 .hero-gradient {
-  @apply bg-gradient-to-r from-indigo-600 to-purple-600;
+  @apply bg-gradient-to-r from-green-600 to-emerald-600;
 }
 
 .glow-button {
@@ -25,7 +28,7 @@ body {
 
 .glow-button::after {
   @apply content-[''] absolute top-0 left-0 w-full h-full bg-white opacity-0 transition-opacity duration-300;
-  box-shadow: 0 0 20px 10px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 20px 10px rgba(16, 185, 129, 0.5);
 }
 
 .glow-button:hover::after {
@@ -41,11 +44,11 @@ body {
 }
 
 .aura-coin::before {
-  @apply content-[''] absolute -inset-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-75 blur;
+  @apply content-[''] absolute -inset-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 opacity-75 blur;
 }
 
 .waitlist-gradient {
-  @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500;
+  @apply bg-gradient-to-r from-green-500 via-emerald-500 to-green-600;
 }
 
 .feature-card {
@@ -53,24 +56,24 @@ body {
 }
 
 .agent-dot {
-  @apply absolute w-2 h-2 rounded-full bg-purple-500;
+  @apply absolute w-2 h-2 rounded-full bg-green-500;
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
   }
   
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
   }
   
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
   }
 }
 
@@ -80,6 +83,5 @@ body {
 
 .globe-container::after {
   @apply content-[''] absolute top-1/2 left-1/2 w-[120%] h-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0) 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0) 70%);
   z-index: -1;
-}

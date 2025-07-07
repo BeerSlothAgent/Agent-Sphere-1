@@ -108,20 +108,20 @@ const Hero = () => {
   const phones = [
     {
       id: 'deploy',
-      title: '🚀 Deploy Agent',
+      title: '🚀 Deploy NEAR Agent',
       subtitle: 'Create & Place',
-      description: 'Design your AI agent and deploy it at precise locations',
-      buttonText: 'Deploy GeoAgent',
+      description: 'Design your NEAR agent and deploy it at precise locations',
+      buttonText: 'Deploy NEAR Agent',
       buttonIcon: <Plus className="h-4 w-4" />,
       link: '/deploy',
       bgImage: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
       overlayContent: (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
           <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Plus className="text-white text-2xl" />
             </div>
-            <div className="font-bold text-sm">Agent Configuration</div>
+            <div className="font-bold text-sm">NEAR Agent Configuration</div>
             <div className="text-xs opacity-80">Choose type, name & location</div>
           </div>
         </div>
@@ -129,10 +129,10 @@ const Hero = () => {
     },
     {
       id: 'preview',
-      title: '🔍 Preview Agents',
+      title: '🔍 Preview NEAR Agents',
       subtitle: 'Test & Debug',
-      description: 'Test your deployed agents in our AR preview environment',
-      buttonText: 'AR Preview',
+      description: 'Test your deployed NEAR agents in our AR preview environment',
+      buttonText: 'NeAR Preview',
       buttonIcon: <Eye className="h-4 w-4" />,
       link: '/ar',
       bgImage: 'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1',
@@ -140,11 +140,11 @@ const Hero = () => {
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
           {/* AR Preview Interactive Elements */}
           <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Eye className="text-white text-2xl" />
             </div>
-            <div className="font-bold text-sm">AR Testing Mode</div>
-            <div className="text-xs opacity-80">View & interact with agents</div>
+            <div className="font-bold text-sm">NeAR Testing Mode</div>
+            <div className="text-xs opacity-80">View & interact with NEAR agents</div>
           </div>
           
           {/* Interactive Agent Dots for AR Preview */}
@@ -181,9 +181,9 @@ const Hero = () => {
     },
     {
       id: 'experience',
-      title: '🌍 Enter AR World',
+      title: '🌍 Enter NeAR World',
       subtitle: 'Live Experience',
-      description: 'Experience full AR with camera and real-world interaction',
+      description: 'Experience full NeAR with camera and real-world NEAR agents',
       buttonText: 'Go Live',
       buttonIcon: <Camera className="h-4 w-4" />,
       link: '#',
@@ -192,15 +192,15 @@ const Hero = () => {
       overlayContent: (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10">
           <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <Camera className="text-white text-2xl" />
             </div>
-            <div className="font-bold text-sm">Live AR Camera</div>
+            <div className="font-bold text-sm">Live NeAR Camera</div>
             <div className="text-xs opacity-80">Full production experience</div>
           </div>
           <div className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-sm rounded-lg px-2 py-1 text-white text-xs flex items-center">
             <div className="w-2 h-2 rounded-full bg-red-300 mr-1 animate-pulse"></div>
-            Live AR
+            Live NeAR
           </div>
         </div>
       )
@@ -224,29 +224,35 @@ const Hero = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900">
-              <span className="block">Deploy AI Agents</span>
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">in Your World</span>
+              <span className="block">Deploy NEAR Agents</span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-emerald-600">in Your Near World</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-4xl mx-auto">
-              Create, test, and experience location-based AI agents through AR. Transform your school and community with personalized digital assistants.
+              Create, test, and experience location-based NEAR Agents through AR. Transform your school and community with personalized digital assistants powered by NEAR Protocol.
             </p>
+            <div className="mt-4 flex items-center justify-center">
+              <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium flex items-center">
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Powered by NEAR Protocol
+              </div>
+            </div>
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
               <a 
                 href="#auth" 
-                className="glow-button bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl font-medium shadow-md hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+                className="glow-button bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-medium shadow-md hover:shadow-xl transition-all duration-200 flex items-center justify-center"
               >
                 Join Waitlist
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
               <a 
                 href="#features" 
-                className="bg-white text-indigo-600 border border-indigo-200 px-8 py-3 rounded-xl font-medium shadow-sm hover:shadow-md transition-all duration-200"
+                className="bg-white text-green-600 border border-green-200 px-8 py-3 rounded-xl font-medium shadow-sm hover:shadow-md transition-all duration-200"
               >
                 Learn More
               </a>
             </div>
             <div className="mt-6 text-sm text-gray-500">
-              <span className="font-medium">Now testing at:</span> Lincoln High, Roosevelt Academy, Tech Prep
+              <span className="font-medium">NEAR Hackathon 2025:</span> Revolutionary AR QR Payment System
             </div>
           </motion.div>
         </div>
@@ -290,12 +296,12 @@ const Hero = () => {
                       <button
                         onClick={() => {
                           // Placeholder for external link - will be connected to Real AR Viewer
-                          alert('Real AR Viewer coming soon! This will link to the production AR experience.');
+                          alert('Real NeAR Viewer coming soon! This will link to the production NeAR experience with NEAR Protocol integration.');
                         }}
                         className="group relative"
                       >
                         <motion.div 
-                          className="bg-gradient-to-r from-pink-500 to-red-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center space-x-2 group-hover:shadow-xl transition-all duration-300"
+                          className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center space-x-2 group-hover:shadow-xl transition-all duration-300"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -311,8 +317,8 @@ const Hero = () => {
                         <motion.div 
                           className={`${
                             phone.id === 'deploy' 
-                              ? 'bg-gradient-to-r from-indigo-500 to-purple-500' 
-                              : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
+                              : 'bg-gradient-to-r from-green-500 to-emerald-500'
                           } text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center space-x-2 group-hover:shadow-xl transition-all duration-300`}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
@@ -350,22 +356,22 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.8 }}
         >
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-              <span className="text-indigo-600 font-bold text-sm">1</span>
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+              <span className="text-green-600 font-bold text-sm">1</span>
             </div>
             <span className="text-sm font-medium">Deploy</span>
           </div>
           <ArrowRight className="h-4 w-4" />
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-              <span className="text-purple-600 font-bold text-sm">2</span>
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+              <span className="text-green-600 font-bold text-sm">2</span>
             </div>
             <span className="text-sm font-medium">Test</span>
           </div>
           <ArrowRight className="h-4 w-4" />
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-              <span className="text-pink-600 font-bold text-sm">3</span>
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+              <span className="text-green-600 font-bold text-sm">3</span>
             </div>
             <span className="text-sm font-medium">Experience</span>
           </div>

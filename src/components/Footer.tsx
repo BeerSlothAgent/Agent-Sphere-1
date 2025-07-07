@@ -57,16 +57,23 @@ const Footer = () => {
                 <li><a href="#" className="text-indigo-200 hover:text-white transition-colors">About</a></li>
                 <li><a href="#" className="text-indigo-200 hover:text-white transition-colors">Careers</a></li>
                 <li><a href="#" className="text-indigo-200 hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="text-indigo-200 hover:text-white transition-colors">Terms</a></li>
-              </ul>
+            <div className="h-8 w-8 bg-gradient-to-r from-green-400 to-emerald-400 rounded-lg flex items-center justify-center text-white font-bold mr-2">
+              N
             </div>
           </div>
         </div>
         
+            <span className="ml-2 text-sm text-indigo-200">
+              powered by NEAR
+            </span>
         <div className="mt-12 pt-8 border-t border-indigo-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-indigo-200 text-sm">
-            &copy; {new Date().getFullYear()} AgentSphere. All rights reserved.
+            &copy; {new Date().getFullYear()} NEAR AgentSphere. All rights reserved. Built for NEAR Protocol Hackathon 2025.
           </p>
+          <div className="mt-4 inline-flex items-center px-3 py-1 bg-green-600 text-white rounded-full text-sm font-medium">
+            <span className="w-2 h-2 bg-green-300 rounded-full mr-2"></span>
+            NEAR Hackathon 2025
+          </div>
           <div className="mt-4 md:mt-0">
             <div className="flex space-x-6">
               <a href="#" className="text-indigo-200 hover:text-white transition-colors text-sm">
