@@ -45,7 +45,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   const [error, setError] = useState<string>('');
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [selectedObject, setSelectedObject] = useState<DeployedObject | null>(null);
-  const [currentMessage, setCurrentMessage] = useState<string>('');
   const [showInteractionModal, setShowInteractionModal] = useState<boolean>(false);
   const sceneRef = useRef<any>(null);
 
@@ -166,51 +165,6 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
         return "Greetings! I specialize in spatial analysis and 3D modeling. What can I help you visualize?";
       default:
         return "Hello! I'm an AI agent ready to assist you.";
-    }
-  };
-
-  const sendChatMessage = () => {
-    if (!currentMessage.trim() || !selectedObject) return;
-
-    // Add user message
-    const userMessage = { role: 'user' as const, message: currentMessage };
-    setChatMessages(prev => [...prev, userMessage]);
-
-    // Generate mock agent response based on agent type and message
-    const agentResponse = generateAgentResponse(selectedObject.object_type, currentMessage);
-    setTimeout(() => {
-      setChatMessages(prev => [...prev, { role: 'agent', message: agentResponse }]);
-    }, 1000);
-
-    setCurrentMessage('');
-  };
-
-  const generateAgentResponse = (agentType: string, userMessage: string) => {
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes('weather')) {
-      return "Based on current data, it's partly cloudy with a temperature of 72°F. Perfect weather for outdoor activities!";
-    }
-    
-    if (message.includes('location') || message.includes('where')) {
-      return "You're currently at the coordinates where I was deployed. This area is great for exploring!";
-    }
-    
-    switch (agentType) {
-      case 'tutor':
-        if (message.includes('math') || message.includes('calculate')) {
-          return "I'd be happy to help with math! What specific problem are you working on?";
-        }
-        return "I can help you with various subjects including math, science, and literature. What would you like to learn about?";
-      
-      case 'landmark':
-        return "This location has interesting features nearby. I can provide directions, local business information, or historical facts about the area.";
-      
-      case 'building':
-        return "I can help analyze spatial relationships and create 3D models. Are you working on any architectural or design projects?";
-      
-      default:
-        return "That's an interesting question! I'm here to help with various tasks. Could you tell me more about what you need?";
     }
   };
 
@@ -622,11 +576,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
             <div className="mt-6 space-y-2">
               {selectedObject.chat_enabled && (
                 <button
-                  onClick={() => {
-                    setShowInteractionPanel(true);
-                    const greeting = getAgentGreeting(selectedObject.object_type);
-                    setChatMessages([{ role: 'agent', message: greeting }]);
-                  }}
+                  onClick={() => setShowInteractionModal(true)}
                   className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
                 >
                   💬 Start Chat
