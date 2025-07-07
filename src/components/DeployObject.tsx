@@ -45,9 +45,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
   
   // Notification system settings
   const [enableProximityNotifications, setEnableProximityNotifications] = useState(true);
-  const [showOnMap, setShowOnMap] = useState(true);
-  const [notificationPriority, setNotificationPriority] = useState('normal');
-  const [mapMarkerStyle, setMapMarkerStyle] = useState('standard');
 
   // Deployment state
   const [isDeploying, setIsDeploying] = useState(false);
@@ -399,10 +396,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         defi_enabled: defiEnabled,
         mcp_integrations: selectedMcpIntegrations.length > 0 ? selectedMcpIntegrations : null,
         interaction_types: interactionTypes,
-        enable_proximity_notifications: enableProximityNotifications,
-        show_on_map: showOnMap,
-        notification_priority: notificationPriority,
-        map_marker_style: mapMarkerStyle,
         latitude: location.latitude,
         longitude: location.longitude,
         altitude: location.altitude,
@@ -416,7 +409,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
         agent_wallet_address: blockchainResult.agentWalletAddress,
         agent_wallet_type: selectedWalletType,
         interaction_fee_usdfc: parseFloat(interactionFee),
-        network: 'near-testnet', // This now matches the database constraint
+        network: 'near-testnet',
         contract_address: blockchainResult.agentContractId,
         deployment_tx: blockchainResult.transactionHash,
         deployment_block: blockchainResult.blockHeight,
@@ -556,7 +549,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <li>• Users get notified when entering {deployedAgent.range_meters}m range</li>
                   <li>• Notification icon changes color and shows badge</li>
                   <li>• Tap notification to see map with your agent</li>
-                  <li>• Priority: {deployedAgent.notification_priority || 'normal'}</li>
+                  <li>• Priority: normal</li>
                 </ul>
               </div>
               
@@ -568,7 +561,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   <li>• Agent appears on nearby agents map</li>
                   <li>• Shows {deployedAgent.range_meters}m range circle</li>
                   <li>• Users can switch between map and AR camera</li>
-                  <li>• Marker style: {deployedAgent.map_marker_style || 'standard'}</li>
+                  <li>• Marker style: standard</li>
                 </ul>
               </div>
             </div>
@@ -644,11 +637,11 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
                 <div>
                   <span className="text-gray-600">Notifications:</span>
-                  <p className="font-medium">{deployedAgent.enable_proximity_notifications ? 'Enabled' : 'Disabled'}</p>
+                  <p className="font-medium">Enabled (UI only)</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Map Visibility:</span>
-                  <p className="font-medium">{deployedAgent.show_on_map ? 'Visible' : 'Hidden'}</p>
+                  <p className="font-medium">Visible</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Network:</span>
@@ -710,7 +703,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 </div>
                 <div>
                   <span className="text-purple-700">Notification Range:</span>
-                  <p className="font-medium">{deployedAgent.range_meters?.toFixed(1)}m detection radius</p>
+                  <p className="font-medium">{deployedAgent.range_meters?.toFixed(1) || '25.0'}m detection radius</p>
                 </div>
               </div>
             </div>
@@ -746,7 +739,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
               <h4 className="font-medium text-indigo-800 mb-2">🎯 Test Your Agent Discovery:</h4>
               <ol className="text-sm text-indigo-700 space-y-1">
                 <li>1. Open AR Viewer app on your mobile device</li>
-                <li>2. Walk within {deployedAgent.range_meters}m of deployment location</li>
+                <li>2. Walk within {deployedAgent.range_meters || 25}m of deployment location</li>
                 <li>3. Watch for notification icon to change color</li>
                 <li>4. Tap notification to see map with your agent</li>
                 <li>5. Switch to AR camera to interact with agent</li>
@@ -957,7 +950,6 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   value={agentDescription}
                   onChange={(e) => setAgentDescription(e.target.value)}
                   placeholder="Describe what your NEAR agent does and how it can help users with NEAR Protocol integration..."
-                  placeholder="My NEAR Study Buddy"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -1149,57 +1141,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
                       <span className="text-sm text-gray-700">
-                        Enable proximity notifications (recommended)
+                        Enable proximity notifications (UI only - not stored)
                       </span>
                     </label>
-                    
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={showOnMap}
-                        onChange={(e) => setShowOnMap(e.target.checked)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                      />
-                      <span className="text-sm text-gray-700">
-                        Show on nearby agents map
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Discovery Settings */}
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-3">Discovery Settings:</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Notification Priority:
-                      </label>
-                      <select
-                        value={notificationPriority}
-                        onChange={(e) => setNotificationPriority(e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="low">Low - Subtle notification</option>
-                        <option value="normal">Normal - Standard notification</option>
-                        <option value="high">High - Prominent notification</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Map Marker Style:
-                      </label>
-                      <select
-                        value={mapMarkerStyle}
-                        onChange={(e) => setMapMarkerStyle(e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="standard">Standard - Type-based color</option>
-                        <option value="prominent">Prominent - Larger marker</option>
-                        <option value="minimal">Minimal - Small marker</option>
-                      </select>
-                    </div>
                   </div>
                 </div>
 
@@ -1207,10 +1151,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                 <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <h5 className="font-medium text-gray-700 mb-3">Notification Preview:</h5>
                   <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      notificationPriority === 'high' ? 'bg-red-500' :
-                      notificationPriority === 'normal' ? 'bg-blue-500' : 'bg-gray-500'
-                    }`}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-blue-500">
                       <span className="text-white text-xs">🔔</span>
                     </div>
                     <div>
@@ -1225,7 +1166,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   
                   <div className="mt-3 p-2 bg-white rounded border">
                     <p className="text-xs text-gray-600">
-                      <strong>Map Display:</strong> {mapMarkerStyle} marker with {rangeMeters}m range circle
+                      <strong>Map Display:</strong> Standard marker with {rangeMeters}m range circle
                     </p>
                   </div>
                 </div>
