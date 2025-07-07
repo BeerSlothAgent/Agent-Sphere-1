@@ -206,27 +206,31 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                     </div>
                     <h3 className="mt-4 text-xl font-medium text-white">You're on the list!</h3>
                     <p className="mt-2 text-white text-opacity-80">
-            
-            <div className="mt-8 bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-lg font-medium text-gray-900">Connect Your Wallet</h3>
-              <p className="mt-2 text-gray-600">
-                Store your USDFC securely and trade with other NEAR users.
-              </p>
-              <div className="mt-4">
-                <button 
-                  className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200"
-                  aria-describedby="wallet-status"
-                >
-                  <Wallet className="h-5 w-5 mr-2" />
-                  Connect NEAR Wallet (Coming Soon)
-                </button>
-                <p id="wallet-status" className="mt-2 text-sm text-gray-500 text-center">
-                  NEAR wallet integration will be available at launch
-                </p>
+                      We'll notify you when NEAR AgentSphere is ready for early access.
+                    </p>
+                    
+                    <div className="mt-8 bg-white rounded-xl shadow-md p-6">
+                      <h3 className="text-lg font-medium text-gray-900">Connect Your Wallet</h3>
+                      <p className="mt-2 text-gray-600">
+                        Store your USDFC securely and trade with other NEAR users.
+                      </p>
+                      <div className="mt-4">
+                        <button 
+                          className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200"
+                          aria-describedby="wallet-status"
+                        >
+                          <Wallet className="h-5 w-5 mr-2" />
+                          Connect NEAR Wallet (Coming Soon)
+                        </button>
+                        <p id="wallet-status" className="mt-2 text-sm text-gray-500 text-center">
+                          NEAR wallet integration will be available at launch
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-          </motion.div>
           </motion.div>
         </div>
       </div>
