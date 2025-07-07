@@ -112,9 +112,9 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       arObject: 'octahedron',
       arColor: '#06B6D4',
       arIcon: <Octagon className="h-6 w-6" />
-      label: 'NEAR Landmark',
-      description: 'NEAR-powered location-based information and context provider',
-      value: 'Content Creator', 
+    },
+    { 
+      value: 'Content Creator',
       label: 'Content Creator', 
       description: 'Creative agent for content generation (appears as pink torus in AR)',
       icon: <Palette className="h-4 w-4" />,

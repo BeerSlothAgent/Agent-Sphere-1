@@ -114,6 +114,7 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
+            <div>
               <div className="px-6 py-8 sm:p-10 sm:pb-6">
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-2xl leading-8 font-extrabold text-white sm:text-3xl">
@@ -232,6 +233,7 @@ const AuthSection = ({ waitlistCount, setWaitlistCount, supabase }: AuthSectionP
                   NEAR wallet integration will be available at launch
                 </p>
               </div>
+            </div>
             </div>
           </motion.div>
         </div>
