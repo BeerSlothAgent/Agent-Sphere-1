@@ -797,7 +797,7 @@ const ARQRModal: React.FC<ARQRModalProps> = ({
       };
 
       // Generate QR code using QR.js
-      const QR = await import('qrcode');
+      const QR: any = await import('qrcode');
       const qrDataURL = await QR.toDataURL(JSON.stringify(blockchainData), {
         width: 300,
         margin: 2,

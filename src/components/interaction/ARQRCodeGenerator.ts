@@ -302,7 +302,18 @@ export class ARQRCodeGenerator {
     // Try to find the agent in the scene
     const agentElement = document.querySelector(`[data-agent-id="${agentId}"]`);
     if (agentElement) {
-      const position = agentElement.getAttribute('position');
+      const positionAttr = agentElement.getAttribute('position');
+      if (positionAttr && typeof positionAttr === 'string') {
+        // Parse position string like "1 2 3" into object
+        const coords = positionAttr.split(' ').map(Number);
+        return {
+          x: coords[0] || 0,
+          y: coords[1] || 1.6,
+          z: coords[2] || -2
+        };
+      }
+      // If position attribute exists but is an object
+      const position = agentElement.getAttribute('position') as any;
       return {
         x: position.x || 0,
         y: position.y || 1.6,

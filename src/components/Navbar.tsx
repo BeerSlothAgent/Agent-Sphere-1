@@ -8,7 +8,7 @@ const Navbar = () => {
   const [showSupabaseModal, setShowSupabaseModal] = useState(false);
   const address = useAddress();
   const disconnect = useDisconnect();
-  const connectionStatus = useConnectionStatus();
+  const _connectionStatus = useConnectionStatus();
   const location = useLocation();
 
   // Check if Supabase is connected

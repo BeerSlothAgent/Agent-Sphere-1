@@ -95,7 +95,7 @@ const Hero = () => {
   ];
 
   // Handle agent click for AR Preview
-  const handleAgentClick = (agent) => {
+  const handleAgentClick = (agent: any) => {
     setSelectedAgent(agent);
     setShowInteractionModal(true);
   };

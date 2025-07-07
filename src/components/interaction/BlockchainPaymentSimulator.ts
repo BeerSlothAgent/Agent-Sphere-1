@@ -260,7 +260,7 @@ export class BlockchainPaymentSimulator {
     }
   }
 
-  private showSuccessNotification(qrData: PaymentData, txHash: string): void {
+  private showSuccessNotification(qrData: PaymentData, _txHash: string): void {
     // Create success notification
     const notification = document.createElement('div');
     notification.className = 'payment-success-notification';

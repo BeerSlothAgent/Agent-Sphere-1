@@ -1008,7 +1008,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
                   {selectedAgentTypeData && (
                     <p className="text-xs text-gray-500 mt-1">{selectedAgentTypeData.description}</p>
                   )}
-                  {agentTypeDescriptionsWithNotifications[selectedAgentType] && (
+                  {agentTypeDescriptionsWithNotifications[selectedAgentType as keyof typeof agentTypeDescriptionsWithNotifications] && (
                     <p className="text-xs text-blue-600 mt-2 italic">
                       📱 {agentTypeDescriptionsWithNotifications[selectedAgentType as keyof typeof agentTypeDescriptionsWithNotifications].notification}
                     </p>
