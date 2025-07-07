@@ -150,24 +150,7 @@ const ARViewer = ({ supabase }: ARViewerProps) => {
   };
 
   const handleAgentInteraction = (agent: DeployedObject) => {
-    // Convert DeployedObject to Agent format for the modal
-    const enhancedAgent = {
-      id: parseInt(agent.id) || Math.random(),
-      name: agent.name,
-      description: agent.description || `I'm a ${agent.object_type} agent ready to help!`,
-      object_type: agent.object_type,
-      latitude: agent.preciselatitude || agent.latitude,
-      longitude: agent.preciselongitude || agent.longitude,
-      range_meters: agent.range_meters || 25,
-      interaction_fee: agent.interaction_fee || 10,
-      interaction_types: agent.interaction_types || ["chat", "voice", "video"],
-      agent_wallet_type: agent.agent_wallet_type || "NEAR",
-      agent_wallet_address: agent.agent_wallet_address || `${agent.name.toLowerCase().replace(/\s+/g, '')}.near`,
-      mcp_integrations: agent.mcp_integrations || ["Chat", "Voice"],
-      is_active: agent.is_active
-    };
-
-    setSelectedObject(enhancedAgent);
+    setSelectedObject(agent);
     setShowInteractionModal(true);
   };
 

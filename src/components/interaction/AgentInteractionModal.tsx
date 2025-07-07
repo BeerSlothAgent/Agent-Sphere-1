@@ -21,20 +21,34 @@ import { ARQRCodeGenerator, PaymentData, generateTransactionId } from './ARQRCod
 import { BlockchainPaymentSimulator } from './BlockchainPaymentSimulator';
 import './ARPaymentStyles.css';
 
-interface Agent {
-  id: number;
+interface DeployedObject {
+  id: string;
   name: string;
   description: string;
   object_type: string;
+  user_id: string;
+  location_type: string;
+  range_meters: number;
+  chat_enabled: boolean;
+  voice_enabled: boolean;
+  mcp_integrations: any;
+  crypto_wallet_config: any;
+  deployment_cost: number;
+  interaction_fee: number;
+  owner_wallet: string;
   latitude: number;
   longitude: number;
-  range_meters: number;
-  interaction_fee: number;
-  interaction_types: string[];
-  agent_wallet_type: string;
-  agent_wallet_address: string;
-  mcp_integrations: string[];
+  altitude?: number;
+  preciselatitude?: number;
+  preciselongitude?: number;
+  precisealtitude?: number;
+  accuracy?: number;
+  correctionapplied?: boolean;
   is_active: boolean;
+  created_at: string;
+  interaction_types?: string[];
+  agent_wallet_type?: string;
+  agent_wallet_address?: string;
 }
 
 interface Message {
@@ -45,7 +59,7 @@ interface Message {
 }
 
 interface AgentInteractionModalProps {
-  agent: Agent | null;
+  agent: DeployedObject | null;
   visible: boolean;
   onClose: () => void;
   userLocation?: { latitude: number; longitude: number };
@@ -92,8 +106,8 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
     Math.round(calculateDistance(
       userLocation.latitude, 
       userLocation.longitude, 
-      agent.latitude, 
-      agent.longitude
+      agent.preciselatitude || agent.latitude, 
+      agent.preciselongitude || agent.longitude
     )) : 25;
 
   // Agent personalities and smart responses
@@ -495,7 +509,7 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Capabilities</h3>
                   <div className="flex flex-wrap gap-2">
-                    {agent.mcp_integrations.map((capability, index) => (
+                    {(agent.mcp_integrations || []).map((capability: string, index: number) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -509,7 +523,7 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between text-sm text-gray-600">
                     <span>Agent Wallet:</span>
-                    <span className="font-mono">{agent.agent_wallet_address}</span>
+                    <span className="font-mono">{agent.agent_wallet_address || 'Not configured'}</span>
                   </div>
                 </div>
               </div>
