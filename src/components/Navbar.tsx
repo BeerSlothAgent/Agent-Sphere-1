@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, Plus, Eye, Database, Wallet } from 'lucide-react';
+import { Menu, X, Plus, Eye, Database } from 'lucide-react';
 import { useAddress, useDisconnect, ConnectWallet, useConnectionStatus } from '@thirdweb-dev/react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,6 @@ const Navbar = () => {
   const [showSupabaseModal, setShowSupabaseModal] = useState(false);
   const address = useAddress();
   const disconnect = useDisconnect();
-  const _connectionStatus = useConnectionStatus();
   const location = useLocation();
 
   // Check if Supabase is connected
