@@ -767,6 +767,7 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
           className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
           {/* Header */}
+          <div className="bg-gradient-to-r from-green-600 to-blue-600 px-8 py-6">
             <h1 className="text-3xl font-bold text-white">Deploy NEAR Agent</h1>
             <p className="text-green-100 mt-2">Create and deploy your NEAR agent to the NEAR blockchain with NeAR QR Pay</p>
           </div>
