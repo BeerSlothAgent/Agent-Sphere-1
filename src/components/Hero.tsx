@@ -327,17 +327,6 @@ const Hero = () => {
                   </div>
                 </div>
               </div>
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          {phone.buttonIcon}
-                          <span>{phone.buttonText}</span>
-                        </motion.div>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
               
               {/* Phone description */}
               <div className="mt-6 text-center">
