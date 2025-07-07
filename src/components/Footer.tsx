@@ -95,3 +95,4 @@ const Footer = () => {
       </div>
     </footer>
   );
+}
