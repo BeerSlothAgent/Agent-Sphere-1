@@ -295,8 +295,8 @@ const Hero = () => {
                     {phone.external ? (
                       <button
                         onClick={() => {
-                          // Placeholder for external link - will be connected to Real AR Viewer
-                          alert('Real NeAR Viewer coming soon! This will link to the production NeAR experience with NEAR Protocol integration.');
+                          // Open the live AR viewer in a new tab
+                          window.open('https://admirable-hamster-b9c370.netlify.app/', '_blank');
                         }}
                         className="group relative"
                       >
