@@ -7,11 +7,8 @@ export interface TransactionResult {
 }
 
 export class BlockchainPaymentSimulator {
-  private _transactions: Map<string, any> = new Map();
 
   async simulatePayment(qrData: PaymentData): Promise<TransactionResult> {
-    const _transactionId = qrData.transactionId;
-    
     try {
       // Show wallet popup simulation
       await this.showWalletPopup(qrData);

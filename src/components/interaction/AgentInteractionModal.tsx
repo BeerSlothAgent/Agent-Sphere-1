@@ -10,7 +10,8 @@ import {
   DollarSign,
   Wallet,
   Loader2,
-  QrCode
+  QrCode,
+  CheckCircle
 } from 'lucide-react';
 import { ARQRCodeGenerator, PaymentData, generateTransactionId } from './ARQRCodeGenerator';
 import { BlockchainPaymentSimulator } from './BlockchainPaymentSimulator';
@@ -223,7 +224,7 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
       window.generateARQRCode = (data: PaymentData) => qrGenerator.generateQRCode(data);
       window.removeARQRCode = () => qrGenerator.removeQRCode();
       window.blockchainPaymentSimulator = paymentSimulator;
-      window.triggerPaymentSuccess = (data: PaymentData) => {
+      window.triggerPaymentSuccess = (_data: PaymentData) => {
         qrGenerator.removeQRCode();
         setPaymentStep('success');
         setTimeout(() => {
@@ -246,11 +247,8 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
   };
 
   const handleQRScanSimulation = async () => {
-    setScanningState('scanning');
-    
     // Simulate scanning delay
     setTimeout(() => {
-      setScanningState('success');
       triggerBlockchainWallet();
     }, 2000);
   };
@@ -320,12 +318,6 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
     }, 1000);
   };
 
-  const _formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-    
   const handleCancelPayment = () => {
     if (window.removeARQRCode) {
       window.removeARQRCode();
