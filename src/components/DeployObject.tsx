@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Wallet, Globe, Settings, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
+import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Globe, Settings, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
 
 interface Location {
   latitude: number;
