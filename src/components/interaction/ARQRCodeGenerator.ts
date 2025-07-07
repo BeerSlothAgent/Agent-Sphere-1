@@ -86,7 +86,7 @@ export class ARQRCodeGenerator {
               dark: '#000000',
               light: '#FFFFFF'
             }
-          }, (error) => {
+          }, (error: Error | null) => {
             if (error) {
               reject(error);
             } else {

@@ -8,9 +8,7 @@ import {
   MapPin,
   Send,
   DollarSign,
-  Clock,
-  CheckCircle,
-  AlertCircle,
+  Wallet,
   Loader2,
   QrCode
 } from 'lucide-react';
@@ -90,13 +88,10 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
   const [selectedInteractionType, setSelectedInteractionType] = useState<'chat' | 'voice' | 'video'>('chat');
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentStep, setPaymentStep] = useState<'selection' | 'qr-generated' | 'processing' | 'success'>('selection');
   const [qrCodeData, setQrCodeData] = useState<PaymentData | null>(null);
   const [paymentTimer, setPaymentTimer] = useState(300); // 5 minutes
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [scanningState, setScanningState] = useState<'waiting' | 'scanning' | 'success'>('waiting');
-  const [qrCodeDataURL, setQrCodeDataURL] = useState('');
 
   // Calculate distance
   const distance = userLocation && agent ? 
@@ -209,7 +204,7 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
       transactionId: generateTransactionId(),
       timestamp: Date.now(),
       walletAddress: 'user-wallet-address-here',
-      merchantAddress: agent.agent_wallet_address
+      merchantAddress: agent.agent_wallet_address || ''
     };
 
     setQrCodeData(paymentData);
@@ -280,13 +275,11 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
   };
 
   const handleTraditionalPayment = async () => {
-    setIsProcessingPayment(true);
     setPaymentStep('processing');
     
     // Simulate traditional payment processing
     await new Promise(resolve => setTimeout(resolve, 3000));
     
-    setIsProcessingPayment(false);
     setPaymentStep('success');
     
     setTimeout(() => {
@@ -327,7 +320,7 @@ const AgentInteractionModal: React.FC<AgentInteractionModalProps> = ({
     }, 1000);
   };
 
-  const formatTime = (seconds: number): string => {
+  const _formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu, X, Plus, Eye, Database } from 'lucide-react';
-import { useAddress, useDisconnect, ConnectWallet, useConnectionStatus } from '@thirdweb-dev/react';
+import { useAddress, useDisconnect, ConnectWallet } from '@thirdweb-dev/react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
