@@ -1,6 +1,5 @@
 import { Github, Twitter, Instagram } from 'lucide-react';
 
-export default Footer;
 const Footer = () => {
   return (
     <footer className="bg-indigo-900 text-white">
@@ -97,3 +96,5 @@ const Footer = () => {
     </footer>
   );
 };
+
+export default Footer;
