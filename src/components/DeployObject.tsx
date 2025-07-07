@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Globe, Settings, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
+import { MapPin, Crosshair, Plus, AlertCircle, CheckCircle, Loader2, Eye, Mic, MessageSquare, Globe, Zap, DollarSign, User, Building, GraduationCap, Landmark, Gamepad2, Palette, Store, Cuboid as Cube, Brain, Box, Circle, Triangle, Cylinder, Octagon } from 'lucide-react';
 
 interface Location {
   latitude: number;
@@ -101,14 +101,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       label: 'Building', 
       description: 'Architectural information agent (appears as gray cube in AR)',
       icon: <Building className="h-4 w-4" />,
-      label: 'NEAR Study Buddy',
-      description: 'NEAR-powered educational companion for learning assistance',
+      arObject: 'cube',
+      arColor: '#6B7280',
       arIcon: <Box className="h-6 w-6" />
     },
     { 
       value: 'Intelligent Assistant', 
-      label: 'NEAR Tutor',
-      description: 'NEAR-powered specialized teaching agent for specific subjects',
+      label: 'Intelligent Assistant',
+      description: 'Multi-faceted helper shown as an octahedron in AR',
       icon: <Brain className="h-4 w-4" />,
       arObject: 'octahedron',
       arColor: '#06B6D4',
@@ -119,14 +119,14 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       label: 'Content Creator', 
       description: 'Creative agent for content generation (appears as pink torus in AR)',
       icon: <Palette className="h-4 w-4" />,
-      label: 'NEAR Building',
-      description: 'NEAR-powered architectural and building-specific information agent',
+      arObject: 'torus',
+      arColor: '#EC4899',
       arIcon: <Circle className="h-6 w-6" />
     },
     { 
       value: 'Local Services', 
-      label: 'NEAR Intelligent Assistant',
-      description: 'Advanced NEAR-powered AI assistant with enhanced capabilities',
+      label: 'Local Services',
+      description: 'Community service pillar displayed as a cylinder in AR',
       icon: <Store className="h-4 w-4" />,
       arObject: 'cone',
       arColor: '#EAB308',
@@ -137,6 +137,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       label: 'Tutor/Teacher', 
       description: 'Professional educational instructor (appears as indigo pyramid in AR)',
       icon: <GraduationCap className="h-4 w-4" />,
+      arObject: 'pyramid',
+      arColor: '#4F46E5',
       arIcon: <Triangle className="h-6 w-6" />
     },
     { 
@@ -153,6 +155,8 @@ const DeployObject = ({ supabase }: DeployObjectProps) => {
       label: 'Game Agent', 
       description: 'Interactive gaming companion (appears as red icosahedron in AR)',
       icon: <Gamepad2 className="h-4 w-4" />,
+      arObject: 'icosahedron',
+      arColor: '#DC2626',
       arIcon: <Octagon className="h-6 w-6" />
     }
   ];
