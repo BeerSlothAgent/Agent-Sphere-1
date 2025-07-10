@@ -15,10 +15,11 @@ interface DeployedObject {
   range_meters: number;
   chat_enabled: boolean;
   voice_enabled: boolean;
+  defi_enabled: boolean;
   mcp_integrations: any;
   crypto_wallet_config: any;
   deployment_cost: number;
-  interaction_fee: number;
+  interaction_fee_usdfc: number;
   owner_wallet: string;
   latitude: number;
   longitude: number;
@@ -26,13 +27,40 @@ interface DeployedObject {
   preciselatitude?: number;
   preciselongitude?: number;
   precisealtitude?: number;
+  altitude_rtk?: number;
   accuracy?: number;
   correctionapplied?: boolean;
   is_active: boolean;
   created_at: string;
+  updated_at?: string;
   interaction_types?: string[];
   agent_wallet_type?: string;
   agent_wallet_address?: string;
+  network?: string;
+  contract_address?: string;
+  deployment_tx?: string;
+  deployment_block?: number;
+  gas_used?: number;
+  currency_type?: string;
+  rtk_enhanced?: boolean;
+  rtk_provider?: string;
+  eliza_config?: any;
+  chainlink_config?: any;
+  tokenization_config?: any;
+  staking_rewards?: boolean;
+  yield_generation?: boolean;
+  model_url?: string;
+  model_type?: string;
+  scale_x?: number;
+  scale_y?: number;
+  scale_z?: number;
+  rotation_x?: number;
+  rotation_y?: number;
+  rotation_z?: number;
+  visibility_radius?: number;
+  animations?: any;
+  scale?: any;
+  voice_enabled?: boolean;
 }
 
 interface ARViewerProps {
