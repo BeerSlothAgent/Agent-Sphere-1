@@ -60,7 +60,6 @@ interface DeployedObject {
   visibility_radius?: number;
   animations?: any;
   scale?: any;
-  voice_enabled?: boolean;
 }
 
 interface ARViewerProps {
