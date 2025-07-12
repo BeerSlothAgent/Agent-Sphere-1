@@ -15,37 +15,8 @@ import {
 } from 'lucide-react';
 import { ARQRCodeGenerator, PaymentData, generateTransactionId } from './ARQRCodeGenerator';
 import { BlockchainPaymentSimulator } from './BlockchainPaymentSimulator';
+import { DeployedObject } from '../../types/common';
 import './ARPaymentStyles.css';
-
-interface DeployedObject {
-  id: string;
-  name: string;
-  description: string;
-  object_type: string;
-  user_id: string;
-  location_type: string;
-  range_meters: number;
-  chat_enabled: boolean;
-  voice_enabled: boolean;
-  mcp_integrations: any;
-  crypto_wallet_config: any;
-  deployment_cost: number;
-  interaction_fee: number;
-  owner_wallet: string;
-  latitude: number;
-  longitude: number;
-  altitude?: number;
-  preciselatitude?: number;
-  preciselongitude?: number;
-  precisealtitude?: number;
-  accuracy?: number;
-  correctionapplied?: boolean;
-  is_active: boolean;
-  created_at: string;
-  interaction_types?: string[];
-  agent_wallet_type?: string;
-  agent_wallet_address?: string;
-}
 
 interface Message {
   id: string;
